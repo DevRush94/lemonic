@@ -3,7 +3,7 @@
 a,button{outline:0;border:0;cursor:pointer}
 a::-moz-focus-inner{border:0}
 a,a:active,a:focus,a:hover{outline:0;text-decoration:none}
-img{border:0;max-width:100%;display:block}
+img{border:0;width:100%;display:block}
 body,html{margin:0;padding:0;width:100%}
 ul{margin-bottom:0}
 .ease{transition:.3s all ease-in-out}
@@ -53,3 +53,6 @@ input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focu
 .scroll_left,.scroll_right{position:absolute;z-index:1;top:0;width:70px;height:calc(10vw + 15px)}
 .scroll_left{left:0;background:linear-gradient(to right,rgba(0,0,0,1),rgba(0,0,0,0))}
 .scroll_right{right:0;background:linear-gradient(to left,rgba(0,0,0,1),rgba(0,0,0,0))}
+@media screen and (max-width:768px){
+.song_box{width:calc(30vw + 15px);height:calc(30vw + 15px)}
+}
