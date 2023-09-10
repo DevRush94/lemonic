@@ -1,12 +1,14 @@
 <template>
   <main>
-    <h1>{{ mainData?.playlists.items[0].name }}</h1>
-    <div class="box">
-      <li class="grid" v-for="track in playlistTracks" :key="track.id">
-        <div class="song-box">
-          <img :src="track.track.album.images[1].url" alt="Album cover">
-        </div>
-      </li>
+    <div v-for="(playlist, playlistIndex) in subPlaylist" :key="'playlist-' + playlistIndex">
+      <h2>{{ playlist.name }}</h2>
+      <ul class="box">
+        <li class="grid" v-for="track in playlist.tracks.items" :key="track.id">
+          <div class="song-box">
+            <img :src="track.track.album.images[1].url" alt="Album cover">
+          </div>
+        </li>
+      </ul>
     </div>
   </main>
 </template>
@@ -20,7 +22,9 @@ const redirectUri = encodeURIComponent('http://127.0.0.1:5173/');
 export default {
   data() {
     return {
-      playlistTracks: []
+      mainData: null,
+      playlistTracks: [],
+      subPlaylist: []
     };
   },
   async mounted() {
@@ -69,19 +73,27 @@ export default {
       });
       const data = await response.json();
       this.mainData = data;
-      localStorage.setItem("mainPlaylist", JSON.stringify(this.mainData))
+      localStorage.setItem("mainPlaylist", JSON.stringify(this.mainData));
       console.log(data);
-      const playlist = await fetch(data.playlists.items[1].href, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      const playlistData = await playlist.json();
-      this.playlistTracks = playlistData.tracks.items;
-      localStorage.setItem("subPlaylist", JSON.stringify(this.playlistTracks))
 
+      // Determine the number of playlists you want to fetch
+      const numberOfPlaylists = data.playlists.items.length; // You can change this number to fetch more or less
+      let allPlaylistsData = [];
+
+      for (let i = 0; i < numberOfPlaylists; i++) {
+        const playlistResponse = await fetch(data.playlists.items[i].href, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const playlistData = await playlistResponse.json();
+        allPlaylistsData.push(playlistData);
+      }
+
+      this.playlistTracks = allPlaylistsData[0].tracks.items; // Using the first playlist's tracks as an example
+      localStorage.setItem("subPlaylist", JSON.stringify(allPlaylistsData));
     },
     async cacheLoad() {
       this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
