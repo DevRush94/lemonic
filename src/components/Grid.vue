@@ -2,13 +2,27 @@
   <main class="padder">
     <div class="playList_layout" v-for="(playlist, playlistIndex) in subPlaylist" :key="'playlist-' + playlistIndex">
       <h3>{{ playlist.name }}</h3>
-      <ul class="box">
-        <li class="grid" v-for="track in playlist.tracks.items" :key="track.id">
-          <div class="song_box">
-            <img :src="track.track.album.images[1].url" alt="Album cover">
-          </div>
-        </li>
-      </ul>
+      <div class="dragger">
+        <div
+          class="scroll_left"
+          @mouseover="startScrolling(playlist.id, 'left')"
+          @mouseout="stopScrolling">
+        </div>
+
+        <ul class="box" v-bind:id="playlist.id">
+          <li class="grid" v-for="track in playlist.tracks.items" :key="track.id">
+            <div class="song_box">
+              <img :src="track.track.album.images[1].url" alt="Album cover">
+            </div>
+          </li>
+        </ul>
+        <div
+          class="scroll_right"
+          @mouseover="startScrolling(playlist.id, 'right')"
+          @mouseout="stopScrolling">
+        </div>
+
+      </div>
     </div>
   </main>
 </template>
@@ -24,7 +38,10 @@ export default {
     return {
       mainData: null,
       playlistTracks: [],
-      subPlaylist: []
+      subPlaylist: [],
+      scrolling: false,
+      scrollDirection: null,
+      currentPlaylistId: null
     };
   },
   async mounted() {
@@ -51,6 +68,33 @@ export default {
     }
   },
   methods: {
+    startScrolling(playlistId, direction) {
+      this.scrolling = true;
+      this.scrollDirection = direction;
+      this.currentPlaylistId = playlistId;
+      this.scroll();
+    },
+
+    scroll() {
+      if (!this.scrolling) {
+        return;
+      }
+
+      const playlistElement = document.getElementById(this.currentPlaylistId);
+      const scrollAmount = 10;  // Adjust for scroll speed
+
+      if (this.scrollDirection === 'left') {
+        playlistElement.scrollLeft -= scrollAmount;
+      } else if (this.scrollDirection === 'right') {
+        playlistElement.scrollLeft += scrollAmount;
+      }
+
+      requestAnimationFrame(this.scroll);
+    },
+
+    stopScrolling() {
+      this.scrolling = false;
+    },
     async getAccessToken(authorizationCode) {
       const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
@@ -103,40 +147,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.box {
-  display: flex;
-  align-items: center;
-  gap: 2vw 1vw;
-  flex-wrap: nowrap;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-
-
-}
-
-.padder {
-
-  padding: 100px 15px;
-}
-
-.playList_layout h3 {
-  padding: 15px 0;
-}
-
-.grid {
-  flex: 1 0 auto;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-
-}
-
-.song_box {
-  width: calc(10vw + 15px);
-  height: calc(10vw + 15px);
-  background: #000;
-}
-</style>
