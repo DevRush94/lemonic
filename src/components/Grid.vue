@@ -1,10 +1,10 @@
 <template>
-  <main>
-    <div v-for="(playlist, playlistIndex) in subPlaylist" :key="'playlist-' + playlistIndex">
-      <h2>{{ playlist.name }}</h2>
+  <main class="padder">
+    <div class="playList_layout" v-for="(playlist, playlistIndex) in subPlaylist" :key="'playlist-' + playlistIndex">
+      <h3>{{ playlist.name }}</h3>
       <ul class="box">
         <li class="grid" v-for="track in playlist.tracks.items" :key="track.id">
-          <div class="song-box">
+          <div class="song_box">
             <img :src="track.track.album.images[1].url" alt="Album cover">
           </div>
         </li>
@@ -106,12 +106,24 @@ export default {
 
 <style scoped>
 .box {
-  padding: 100px 15px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: 2vw 1vw;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+
+}
+
+.padder {
+
+  padding: 100px 15px;
+}
+
+.playList_layout h3 {
+  padding: 15px 0;
 }
 
 .grid {
@@ -119,9 +131,10 @@ export default {
   text-align: center;
   display: flex;
   justify-content: center;
+
 }
 
-.song-box {
+.song_box {
   width: calc(10vw + 15px);
   height: calc(10vw + 15px);
   background: #000;
