@@ -1,10 +1,11 @@
 <script setup>
-//import HelloWorld from './components/HelloWorld.vue'
+import Header from './components/Header.vue';
+import Grid from './components/Grid.vue';
+import Player from './components/Player.vue';
 </script>
 
 <template>
-  <main>
-    Lemonic
-  </main>
+ <Header />
+ <Grid />
+ <Player />
 </template>
-
