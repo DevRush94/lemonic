@@ -1,56 +1,69 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true
-  }
-})
-</script>
+
 <script>
-var myToken;
 const clientId = '4875732b46fe4b2b8671c683ea012688';
 const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
-const basicAuth = (new Buffer.from(client_id + ':' + client_secret).toString('base64'));
+const basicAuth = btoa(clientId + ':' + clientSecret);
+const redirectUri = encodeURIComponent('http://127.0.0.1:5173/');
 
-function getAccessToken(authorizationCode) {
+const url = new URL(window.location.href);
+const code = url.searchParams.get('code');
 
-  fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Basic ${basicAuth}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `grant_type=client_credentials`
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Access Token:', data.access_token);
-      myToken = data.access_token
+if (!code && !localStorage.getItem('token')) {
+  window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`;
+} else {
+  window.history.replaceState({}, document.title, location.href.split("?")[0]);
 
-    })
-    .catch(error => {
-      console.error('Error fetching access token:', error);
-    });
+  if (!localStorage.getItem('token')) {
+    getAccessToken(code).then(getTrackDetails);
+  } else {
+    getTrackDetails();
+  }
 }
 
-// To get track
-// const accessToken = myToken // Replace with your token
-// const trackId = '5nTtCOCds6I0PHMNtqelas'; // Replace with your track ID
+async function getAccessToken(authorizationCode) {
+  try {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${basicAuth}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${redirectUri}`
+    });
 
-// fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
-//   method: 'GET',
-//   headers: {
-//     'Authorization': `Bearer ${accessToken}`,
-//     'Content-Type': 'application/json'
-//   }
-// })
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.error('There was an error!', error);
-//   });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    localStorage.setItem('token', data.access_token);
+  } catch (error) {
+    console.error('Error fetching access token:', error);
+  }
+}
+
+async function getTrackDetails() {
+  try {
+    const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?limit=20`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('There was an error fetching track details!', error);
+  }
+}
+
+
 </script>
 <template>
   <main>
