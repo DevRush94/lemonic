@@ -10,7 +10,7 @@ defineProps({
 var myToken;
 const clientId = '4875732b46fe4b2b8671c683ea012688';
 const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
-const basicAuth = (new Buffer.from(client_id + ':' + client_secret).toString('base64'));
+const basicAuth = btoa(`${clientId}:${clientSecret}`);
 
 function getAccessToken(authorizationCode) {
 
@@ -32,6 +32,9 @@ function getAccessToken(authorizationCode) {
       console.error('Error fetching access token:', error);
     });
 }
+
+// calling  function here
+getAccessToken()
 
 // To get track
 // const accessToken = myToken // Replace with your token
