@@ -9,36 +9,10 @@ defineProps({
 <script>
 var myToken;
 const clientId = '4875732b46fe4b2b8671c683ea012688';
-const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a'; // Keep this secret and safe, typically done server-side.
-const redirectUri = encodeURIComponent('http://127.0.0.1:5173/'); // Replace with your redirect URI
-const basicAuth = btoa(`${clientId}:${clientSecret}`);
-const scopes = encodeURIComponent('user-read-private user-read-email'); // Define your required scopes
-
-var url = new URL(window.location.href);
-var code = url.searchParams.get('code');
-if (!code) {
-  window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}&scope=${scopes}`;
-  url = new URL(window.location.href);
-  code = url.searchParams.get('code');
-  if (code) {
-    getAccessToken(code);
-  }
-}
-else {
-  url = new URL(window.location.href);
-  code = url.searchParams.get('code');
-  if (code) {
-    getAccessToken(code);
-  }
-}
-
+const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
+const basicAuth = (new Buffer.from(client_id + ':' + client_secret).toString('base64'));
 
 function getAccessToken(authorizationCode) {
-  const clientId = 'YOUR_CLIENT_ID';
-  const clientSecret = 'YOUR_CLIENT_SECRET'; // Keep this secret and safe, typically done server-side.
-  const redirectUri = 'http://localhost:3000/callback'; // Replace with your redirect URI
-
-  const basicAuth = btoa(`${clientId}:${clientSecret}`);
 
   fetch('https://accounts.spotify.com/api/token', {
     method: 'POST',
@@ -46,7 +20,7 @@ function getAccessToken(authorizationCode) {
       'Authorization': `Basic ${basicAuth}`,
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: `grant_type=client_credentials&code=${authorizationCode}&redirect_uri=${encodeURIComponent(redirectUri)}`
+    body: `grant_type=client_credentials`
   })
     .then(response => response.json())
     .then(data => {
