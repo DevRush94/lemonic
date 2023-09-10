@@ -44,7 +44,7 @@ async function getAccessToken(authorizationCode) {
 
 async function getTrackDetails() {
   try {
-    const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?limit=20`, {
+    const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -62,7 +62,6 @@ async function getTrackDetails() {
     console.error('There was an error fetching track details!', error);
   }
 }
-
 
 </script>
 <template>
