@@ -63,7 +63,7 @@ export default {
         await this.getFeaturedplaylists();
       }
       else {
-        this.cacheLoad()
+        await this.cacheLoad();
       }
     }
   },
@@ -138,6 +138,7 @@ export default {
 
       this.playlistTracks = allPlaylistsData[0].tracks.items; // Using the first playlist's tracks as an example
       localStorage.setItem("subPlaylist", JSON.stringify(allPlaylistsData));
+      this.cacheLoad()
     },
     async cacheLoad() {
       this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
