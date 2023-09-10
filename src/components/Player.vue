@@ -15,5 +15,6 @@
   right: 0;
   background: #666;
   color: #fff;
+  z-index: 10;
 }
 </style>
