@@ -12,7 +12,7 @@
         <ul class="box" v-bind:id="playlist.id">
           <li class="grid" v-for="track in playlist.tracks.items" :key="track.id">
             <div class="song_box">
-              <img :src="track.track.album.images[1].url" alt="Album cover">
+              <img :src="track?.track?.album?.images?.[1]?.url" alt="Album cover">
             </div>
           </li>
         </ul>
