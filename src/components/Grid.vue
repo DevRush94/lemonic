@@ -1,10 +1,11 @@
 <template>
-  <main class="padder" :class="loadedClass" v-if="!loading">
+  <main class="padder" v-if="!loading">
     <div class="playList_layout" v-for="(playlist, playlistIndex) in subPlaylist" :key="'playlist-' + playlistIndex">
       <h3>{{ playlist.name }}</h3>
       <div class="dragger">
         <div
           class="scroll_left"
+          v-show="showScrollLeft[playlist.id]"
           @mouseover="startScrolling(playlist.id, 'left')"
           @mouseout="stopScrolling">
         </div>
@@ -21,6 +22,7 @@
         </ul>
         <div
           class="scroll_right"
+          v-show="showScrollRight[playlist.id]"
           @mouseover="startScrolling(playlist.id, 'right')"
           @mouseout="stopScrolling">
         </div>
@@ -45,11 +47,12 @@ export default {
       scrolling: false,
       scrollDirection: null,
       currentPlaylistId: null,
-      loadTimes: {}
+      loadTimes: {},
+      showScrollLeft: {},
+      showScrollRight: {}
     };
   },
   async mounted() {
-    const url = new URL(window.location.href);
     this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
     this.playlistTracks = JSON.parse(localStorage.getItem('subPlaylist'));
 
@@ -65,6 +68,22 @@ export default {
     }
   },
   methods: {
+    createScrollVisibilityObject() {
+      const visibilityObject = {};
+      if (this.subPlaylist) {
+        this.subPlaylist.forEach(playlist => {
+          visibilityObject[playlist.id] = true; // Initially set to true
+        });
+      }
+      return visibilityObject;
+    },
+    checkScrollPosition(playlistId) {
+      const playlistElement = document.getElementById(playlistId);
+      const scrollLeftMax = playlistElement.scrollWidth - playlistElement.clientWidth;
+
+      this.showScrollLeft[playlistId] = playlistElement.scrollLeft > 0;
+      this.showScrollRight[playlistId] = playlistElement.scrollLeft < scrollLeftMax;
+    },
     hasLoaded(playlistIndex, trackIndex) {
       const key = `${playlistIndex}-${trackIndex}`;
       const currentTime = Date.now();
@@ -98,6 +117,7 @@ export default {
         playlistElement.scrollLeft += scrollAmount;
       }
       requestAnimationFrame(this.scroll);
+      this.checkScrollPosition(this.currentPlaylistId);
     },
     stopScrolling() {
       this.scrolling = false;
@@ -146,6 +166,7 @@ export default {
     async cacheLoad() {
       this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
       this.subPlaylist = JSON.parse(localStorage.getItem('subPlaylist'));
+      this.initializeScrollVisibilityObjects();
 
       this.loading = false;
 
@@ -162,7 +183,15 @@ export default {
         this.startCascadingEffect();
       });
     },
+    initializeScrollVisibilityObjects() {
+      this.showScrollLeft = this.createScrollVisibilityObject();
+      this.showScrollRight = this.createScrollVisibilityObject();
 
+      // Loop over each playlist and check the initial scroll position
+      this.subPlaylist.forEach(playlist => {
+        setTimeout(() => this.checkScrollPosition(playlist.id))
+      });
+    },
     startCascadingEffect() {
       const timePerTrack = 50;  // 2000ms for 10 tracks
       for (let playlistIndex = 0; playlistIndex < this.subPlaylist.length; playlistIndex++) {
