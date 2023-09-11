@@ -51,7 +51,8 @@ input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focu
 .load.grid{transform:none;opacity:1;filter:blur(0)}
 .dragger{position:relative}
 .song_box{width:calc(10vw + 15px);height:calc(10vw + 15px);background:#000}
-.scroll_left,.scroll_right{position:absolute;z-index:1;top:0;width:70px;height:calc(10vw + 15px)}
+.scroll_left,.scroll_right{position:absolute;z-index:1;top:0;width:70px;display:flex;align-items:center;height:calc(10vw + 15px);cursor:pointer}
+.scroll_left svg,.scroll_right svg{pointer-events:none}
 .scroll_left{left:0;background:linear-gradient(to right,rgba(0,0,0,1),rgba(0,0,0,0))}
 .scroll_right{right:0;background:linear-gradient(to left,rgba(0,0,0,1),rgba(0,0,0,0))}
 @media screen and (max-width:768px){

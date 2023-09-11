@@ -8,6 +8,9 @@
           v-show="showScrollLeft[playlist.id]"
           @mouseover="startScrolling(playlist.id, 'left')"
           @mouseout="stopScrolling">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fill="#fff" d="M8.5 12.8l5.7 5.6c.4.4 1 .4 1.4 0s.4-1 0-1.4l-4.9-5 4.9-5c.4-.4.4-1 0-1.4-.2-.2-.4-.3-.7-.3s-.5.1-.7.3l-5.7 5.6c-.4.5-.4 1.1 0 1.6 0-.1 0-.1 0 0z" />
+          </svg>
         </div>
         <ul class="box" v-bind:id="playlist.id">
           <li
@@ -25,6 +28,9 @@
           v-show="showScrollRight[playlist.id]"
           @mouseover="startScrolling(playlist.id, 'right')"
           @mouseout="stopScrolling">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path fill="#fff" d="M15.54 11.29L9.88 5.64a1 1 0 1 0-1.42 1.41l4.95 5L8.46 17a1 1 0 0 0 .71 1.71 1 1 0 0 0 .71-.3l5.66-5.65a1 1 0 0 0 0-1.47z" />
+          </svg>
         </div>
       </div>
     </div>
@@ -110,7 +116,7 @@ export default {
         return;
       }
       const playlistElement = document.getElementById(this.currentPlaylistId);
-      const scrollAmount = 10;  // Adjust for scroll speed
+      const scrollAmount = 15;  // Adjust for scroll speed
       if (this.scrollDirection === 'left') {
         playlistElement.scrollLeft -= scrollAmount;
       } else if (this.scrollDirection === 'right') {
