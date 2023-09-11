@@ -20,6 +20,10 @@
             :class="{ load: hasLoaded(playlistIndex, trackIndex) }">
             <div class="song_box">
               <img :src="getAlbumCover(track)" alt="Album cover">
+              <div class="song_info">
+                <div class="title__name">{{ track.track.name }}</div>
+                <div class="artist__name">{{ track.track.artists[0].name }}</div>
+              </div>
             </div>
           </li>
         </ul>
@@ -42,6 +46,18 @@
 const clientId = '4875732b46fe4b2b8671c683ea012688';
 const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
 const basicAuth = btoa(clientId + ':' + clientSecret);
+
+function removeAvailableMarkets(data) {
+  if (data && data.tracks && Array.isArray(data.tracks.items)) {
+    data.tracks.items.forEach(item => {
+      if (item.track) {
+        delete item.track.available_markets;
+        item.track.album && delete item.track.album.available_markets;
+      }
+    });
+  }
+  return data;
+}
 
 export default {
   data() {
@@ -162,7 +178,8 @@ export default {
             'Content-Type': 'application/json'
           }
         });
-        const playlistData = await playlistResponse.json();
+        let playlistData = await playlistResponse.json();
+        playlistData = removeAvailableMarkets(playlistData)
         allPlaylistsData.push(playlistData);
       }
       this.playlistTracks = allPlaylistsData[0].tracks.items;

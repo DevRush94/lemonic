@@ -50,11 +50,15 @@ input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focu
 .grid{flex:1 0 auto;text-align:center;display:flex;filter:blur(10px);justify-content:center;transform:translate(150%,0);opacity:0;transition:.5s all cubic-bezier(.75,-.5,.21,1.5);will-change:transform}
 .load.grid{transform:none;opacity:1;filter:blur(0)}
 .dragger{position:relative}
-.song_box{width:calc(10vw + 15px);height:calc(10vw + 15px);background:#000}
+.song_box{width:calc(10vw + 15px);height:calc(10vw + 15px);background:#000;position:relative;cursor:pointer}
+.song_box::after{content:'';position:absolute;z-index:1;top:0;right:0;left:0;bottom:0;background:rgba(0,0,0,.4);transition:.3s cubic-bezier(.815,1.65,.4,.68)}
+.song_box:hover::after{background:rgba(0,0,0,.25)}
 .scroll_left,.scroll_right{position:absolute;z-index:1;top:0;width:70px;display:flex;align-items:center;height:calc(10vw + 15px);cursor:pointer}
 .scroll_left svg,.scroll_right svg{pointer-events:none}
 .scroll_left{left:0;background:linear-gradient(to right,rgba(0,0,0,1),rgba(0,0,0,0))}
 .scroll_right{right:0;background:linear-gradient(to left,rgba(0,0,0,1),rgba(0,0,0,0))}
+.song_info{position:absolute;bottom:0;font-size:12px;text-align:left;padding:10px;width:100%;text-shadow:1px 1px #000;color:#fff;z-index:2}
+.song_info .artist__name,.song_info .title__name{text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
 @media screen and (max-width:768px){
 .song_box{width:calc(30vw + 15px);height:calc(30vw + 15px)}
 }
