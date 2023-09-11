@@ -46,17 +46,17 @@ export default {
   },
   async mounted() {
     const url = new URL(window.location.href);
-    const code = url.searchParams.get('code');
+    // const code = url.searchParams.get('code');
     this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
     this.playlistTracks = JSON.parse(localStorage.getItem('subPlaylist'));
 
 
-    if (!code && !localStorage.getItem('token')) {
-      window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`;
-    } else {
-      window.history.replaceState({}, document.title, location.href.split("?")[0]);
+    // if (!code && !localStorage.getItem('token')) {
+    //   window.location.href = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`;
+    // } else {
+    //   window.history.replaceState({}, document.title, location.href.split("?")[0]);
       if (!localStorage.getItem('token')) {
-        await this.getAccessToken(code);
+        await this.getAccessToken();
       }
       if (!localStorage.getItem('mainPlaylist')) {
         console.log("object", localStorage.getItem('mainPlaylist'));
@@ -65,7 +65,7 @@ export default {
       else {
         await this.cacheLoad();
       }
-    }
+    // }
   },
   methods: {
     startScrolling(playlistId, direction) {
@@ -95,14 +95,14 @@ export default {
     stopScrolling() {
       this.scrolling = false;
     },
-    async getAccessToken(authorizationCode) {
+    async getAccessToken() {
       const response = await fetch('https://accounts.spotify.com/api/token', {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${basicAuth}`,
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${redirectUri}`
+        body: `grant_type=client_credentials`
       });
       const data = await response.json();
       localStorage.setItem('token', data.access_token);
