@@ -1,6 +1,6 @@
 <template>
   <div class="player">
-    Player
+   Now Playing: {{ store.state.trackId }}
   </div>
 </template>
 
@@ -18,3 +18,11 @@
   z-index: 10;
 }
 </style>
+
+
+
+<script setup>
+import { inject } from 'vue';
+const store = inject('store');
+</script>
+

@@ -16,9 +16,9 @@
           <li
             class="grid"
             v-for="(track, trackIndex) in playlist.tracks.items"
-            :key="track.id"
+            :key="track.track.id"
             :class="{ load: hasLoaded(playlistIndex, trackIndex) }">
-            <div class="song_box">
+            <div class="song_box" @click="selectTrack(track.track.id)">
               <img :src="getAlbumCover(track)" alt="Album cover">
               <div class="song_info">
                 <div class="title__name">{{ track.track.name }}</div>
@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import { inject } from 'vue';
+
 const clientId = '4875732b46fe4b2b8671c683ea012688';
 const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
 const basicAuth = btoa(clientId + ':' + clientSecret);
@@ -72,6 +74,16 @@ export default {
       loadTimes: {},
       showScrollLeft: {},
       showScrollRight: {}
+    };
+  },
+  setup() {
+    const store = inject('store');
+
+    const selectTrack = (id) => {
+      store.setTrackId(id);
+    };
+    return {
+      selectTrack
     };
   },
   async mounted() {
