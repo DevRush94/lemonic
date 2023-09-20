@@ -52,13 +52,15 @@ export default {
 .player {
   position: fixed;
   bottom: 0;
-  height: 60px;
+  height: 80px;
   text-align: center;
   left: 0;
   right: 0;
   background: #666;
   color: #fff;
   z-index: 10;
-  padding: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 </style>
