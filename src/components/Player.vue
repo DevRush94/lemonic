@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loader">Loading Selected Song, Please wait...</div>
-  <div class="player" v-if="trackUrl">
+  <div v-else="!loading" class="player" v-if="trackUrl">
     Now Playing: {{ store.state.trackId }}
 
     <audio
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { ref, watch, inject, computed } from 'vue';
+import { ref, watch, inject } from 'vue';
 
 export default {
   setup() {
@@ -32,68 +32,68 @@ export default {
     const audioElement = ref(null);
     const currentTime = ref(0);
     const duration = ref(0);
-    const loading = ref(false); // Loader state
-    const isDragging = ref(false); // to detect if user is dragging
+    const loading = ref(false);
+    const isDragging = ref(false);
 
-    watch(() => store.state.trackId, async (newTrackId) => {
-      if (newTrackId) {
-        loading.value = true; // Start loading
-        try {
-          // Fetching the metadata to get the URL of the track
-          const metadataResponse = await fetch(`https://lemonic.viperadnan.com/api/raw/track/${newTrackId}`, {
-            method: 'GET',
-            headers: {
-              'accept': 'application/json',
+    watch(
+      () => store.state.trackId,
+      async (newTrackId, oldTrackId) => {
+        if (newTrackId) {
+          loading.value = true;
+
+          // Stop the previous song
+          if (oldTrackId && audioElement.value) {
+            audioElement.value.pause();
+            audioElement.value.currentTime = 0;
+          }
+
+          try {
+            const response = await fetch(`https://lemonic.viperadnan.com/api/raw/track/${newTrackId}`, {
+              method: 'GET',
+              headers: {
+                'accept': 'application/json',
+              },
+            });
+
+            const data = await response.json();
+            if (data.url) {
+              const fileResponse = await fetch(data.url);
+              const arrayBuffer = await fileResponse.arrayBuffer();
+              const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
+              trackUrl.value = URL.createObjectURL(blob);
             }
-          });
-
-          const data = await metadataResponse.json();
-          const fileUrl = data.url;
-
-          if (!fileUrl) throw new Error("URL is not available");
-
-          // Fetching the actual file as ArrayBuffer
-          const fileResponse = await fetch(fileUrl);
-          if (!fileResponse.ok) throw new Error("Error fetching track data");
-
-          const arrayBuffer = await fileResponse.arrayBuffer();
-          const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
-
-          trackUrl.value = URL.createObjectURL(blob);
-        } catch (error) {
-          console.error(error);
-        } finally {
-          loading.value = false; // End loading
+          } catch (error) {
+            console.error("Error fetching track data:", error);
+          } finally {
+            loading.value = false;
+          }
         }
       }
-    });
+    );
 
     const startDragging = () => {
       isDragging.value = true;
+      if (audioElement.value) audioElement.value.pause();
     };
 
     const stopDragging = () => {
       isDragging.value = false;
-      setTimeout(() => {
-        changeSeek(); // perform seek when user stops dragging
-      });
+      if (audioElement.value) audioElement.value.play();
+      changeSeek();
     };
+
     const setDuration = () => {
-      if (audioElement.value) {
-        duration.value = audioElement.value.duration;
-      }
-    }
+      if (audioElement.value) duration.value = audioElement.value.duration;
+    };
+
     const changeSeek = () => {
-      if (audioElement.value) {
-        audioElement.value.currentTime = currentTime.value;
-      }
-    }
+      if (audioElement.value) audioElement.value.currentTime = currentTime.value;
+    };
 
     const updateSeek = () => {
-      if (audioElement.value && !isDragging.value) {
-        currentTime.value = audioElement.value.currentTime;
-      }
-    }
+      if (audioElement.value && !isDragging.value) currentTime.value = audioElement.value.currentTime;
+    };
+
     return {
       store,
       trackUrl,
@@ -105,10 +105,10 @@ export default {
       startDragging,
       stopDragging,
       changeSeek,
-      loading
+      loading,
     };
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
