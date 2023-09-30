@@ -1,4 +1,5 @@
 <template>
+  <div v-if="loading" class="loader">Loading Selected Song, Please wait...</div>
   <div class="player" v-if="trackUrl">
     Now Playing: {{ store.state.trackId }}
 
@@ -23,24 +24,37 @@ export default {
     const audioElement = ref(null);
     const currentTime = ref(0);
     const duration = ref(0);
-
-    const progress = computed(() => (currentTime.value / duration.value) * 100 || 0);
+    const loading = ref(false); // Loader state
 
     watch(() => store.state.trackId, async (newTrackId) => {
       if (newTrackId) {
+        loading.value = true; // Start loading
         try {
-          const response = await fetch(`https://lemonic.viperadnan.com/api/raw/track/${newTrackId}`, {
+          // Fetching the metadata to get the URL of the track
+          const metadataResponse = await fetch(`https://lemonic.viperadnan.com/api/raw/track/${newTrackId}`, {
             method: 'GET',
             headers: {
               'accept': 'application/json',
             }
           });
 
-          const data = await response.json();
-          trackUrl.value = data.url ? data.url : '';
+          const data = await metadataResponse.json();
+          const fileUrl = data.url;
 
+          if (!fileUrl) throw new Error("URL is not available");
+
+          // Fetching the actual file as ArrayBuffer
+          const fileResponse = await fetch(fileUrl);
+          if (!fileResponse.ok) throw new Error("Error fetching track data");
+
+          const arrayBuffer = await fileResponse.arrayBuffer();
+          const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
+
+          trackUrl.value = URL.createObjectURL(blob);
         } catch (error) {
-          console.error("Error fetching track data:", error);
+          console.error(error);
+        } finally {
+          loading.value = false; // End loading
         }
       }
     });
@@ -70,7 +84,8 @@ export default {
       duration,
       updateSeek,
       setDuration,
-      changeSeek
+      changeSeek,
+      loading
     };
   }
 }
