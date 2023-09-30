@@ -3,14 +3,22 @@
   <div class="player" v-if="trackUrl">
     Now Playing: {{ store.state.trackId }}
 
-    <audio autoplay ref="audioElement" :src="trackUrl" @timeupdate="updateSeek" @durationchange="setDuration" controls></audio>
+    <audio
+      autoplay
+      ref="audioElement"
+      :src="trackUrl"
+      @timeupdate="updateSeek"
+      @durationchange="setDuration"
+      controls></audio>
 
     <input
       type="range"
-      :value="currentTime"
+      v-model="currentTime"
       :min="0"
       :max="duration"
-      @input="changeSeek" />
+      @mousedown="startDragging"
+      @mouseup="stopDragging"
+      @change="stopDragging" />
   </div>
 </template>
 
@@ -25,6 +33,7 @@ export default {
     const currentTime = ref(0);
     const duration = ref(0);
     const loading = ref(false); // Loader state
+    const isDragging = ref(false); // to detect if user is dragging
 
     watch(() => store.state.trackId, async (newTrackId) => {
       if (newTrackId) {
@@ -59,21 +68,30 @@ export default {
       }
     });
 
-    const updateSeek = () => {
-      if (audioElement.value) {
-        currentTime.value = audioElement.value.currentTime;
-      }
-    }
+    const startDragging = () => {
+      isDragging.value = true;
+    };
 
+    const stopDragging = () => {
+      isDragging.value = false;
+      setTimeout(() => {
+        changeSeek(); // perform seek when user stops dragging
+      });
+    };
     const setDuration = () => {
       if (audioElement.value) {
         duration.value = audioElement.value.duration;
       }
     }
-
-    const changeSeek = (event) => {
+    const changeSeek = () => {
       if (audioElement.value) {
-        audioElement.value.currentTime = event.target.value;
+        audioElement.value.currentTime = currentTime.value;
+      }
+    }
+
+    const updateSeek = () => {
+      if (audioElement.value && !isDragging.value) {
+        currentTime.value = audioElement.value.currentTime;
       }
     }
     return {
@@ -84,6 +102,8 @@ export default {
       duration,
       updateSeek,
       setDuration,
+      startDragging,
+      stopDragging,
       changeSeek,
       loading
     };
