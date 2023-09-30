@@ -4,9 +4,12 @@
 
     <audio autoplay ref="audioElement" :src="trackUrl" @timeupdate="updateSeek" @durationchange="setDuration" controls></audio>
 
-    <div class="audio__player-progress-container">
-      <div :style="{ width: progress + '%' }" class="audio__player-progress"></div>
-    </div>
+    <input
+      type="range"
+      :value="currentTime"
+      :min="0"
+      :max="duration"
+      @input="changeSeek" />
   </div>
 </template>
 
@@ -50,18 +53,24 @@ export default {
 
     const setDuration = () => {
       if (audioElement.value) {
-        console.log(audioElement.value.duration);
         duration.value = audioElement.value.duration;
       }
     }
 
+    const changeSeek = (event) => {
+      if (audioElement.value) {
+        audioElement.value.currentTime = event.target.value;
+      }
+    }
     return {
       store,
       trackUrl,
       audioElement,
+      currentTime,
+      duration,
       updateSeek,
       setDuration,
-      progress
+      changeSeek
     };
   }
 }
@@ -81,16 +90,10 @@ export default {
   padding: 10px;
 }
 
-.audio__player-progress-container {
-  width: 100%;
-  height: 10px;
-  background-color: #e0e0e0;
-  cursor: pointer;
-  position: relative;
-}
-
-.audio__player-progress {
-  height: 100%;
-  background-color: #4caf50;
+audio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  opacity: 0;
 }
 </style>
