@@ -1,6 +1,6 @@
 <template>
-  <div v-if="loading" class="loader">Loading Selected Song, Please wait...</div>
-  <div v-else="!loading" class="player" v-if="trackUrl">
+  <div class="player" v-if="trackUrl">
+    <div v-if="loading" class="loader">Loading Selected Song, Please wait...</div>
     Now Playing: {{ store.state.trackId }}
 
     <audio
@@ -41,11 +41,6 @@ export default {
         if (newTrackId) {
           loading.value = true;
 
-          // Stop the previous song
-          if (oldTrackId && audioElement.value) {
-            audioElement.value.pause();
-            audioElement.value.currentTime = 0;
-          }
 
           try {
             const response = await fetch(`https://lemonic.viperadnan.com/api/raw/track/${newTrackId}`, {
@@ -65,6 +60,11 @@ export default {
           } catch (error) {
             console.error("Error fetching track data:", error);
           } finally {
+            // Stop the previous song
+            if (oldTrackId && audioElement.value) {
+              audioElement.value.pause();
+              audioElement.value.currentTime = 0;
+            }
             loading.value = false;
           }
         }
