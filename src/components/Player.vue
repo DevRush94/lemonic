@@ -19,6 +19,9 @@
       @mousedown="startDragging"
       @mouseup="stopDragging"
       @change="stopDragging" />
+
+    <button @click="togglePlayPause">{{ isPlaying ? 'Pause' : 'Play' }}</button>
+
   </div>
 </template>
 
@@ -34,6 +37,17 @@ export default {
     const duration = ref(0);
     const loading = ref(false);
     const isDragging = ref(false);
+    const isPlaying = ref(true); // Assuming audio auto-plays. Adjust as per your need
+
+    const togglePlayPause = () => {
+      if (!audioElement.value) return;
+      if (isPlaying.value) {
+        audioElement.value.pause();
+      } else {
+        audioElement.value.play();
+      }
+      isPlaying.value = !isPlaying.value;
+    };
 
     watch(
       () => store.state.trackId,
@@ -78,7 +92,7 @@ export default {
 
     const stopDragging = () => {
       isDragging.value = false;
-      if (audioElement.value) audioElement.value.play();
+      if (audioElement.value && isPlaying.value) audioElement.value.play();
       changeSeek();
     };
 
@@ -92,6 +106,11 @@ export default {
 
     const updateSeek = () => {
       if (audioElement.value && !isDragging.value) currentTime.value = audioElement.value.currentTime;
+      if (currentTime.value === audioElement.value.duration) {
+        isPlaying.value = !isPlaying.value;
+        // If Repeat mode on Enable Below
+        // audioElement.value.play();
+      }
     };
 
     return {
@@ -106,6 +125,8 @@ export default {
       stopDragging,
       changeSeek,
       loading,
+      togglePlayPause,
+      isPlaying
     };
   },
 };
