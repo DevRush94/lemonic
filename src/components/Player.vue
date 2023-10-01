@@ -1,4 +1,5 @@
 <template>
+  <div class="player-loading" v-if="store.state.trackId && !trackUrl">Loading</div>
   <div class="player" v-if="trackUrl">
     <div v-if="loading" class="loader">Loading Selected Song, Please wait...</div>
     Now Playing: {{ store.state.trackId }}
@@ -151,5 +152,14 @@ audio {
   width: 0;
   height: 0;
   opacity: 0;
+}
+
+.player-loading {
+  width: 50%;
+  height: 90px;
+  background: #000;
+  position: fixed;
+  right: 0;
+  bottom: 0;
 }
 </style>
