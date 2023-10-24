@@ -1,4 +1,7 @@
 <template>
+  <div class="error-pop" v-if="errorTrack">
+    Your taste is unique. Please try again in 15 minutes, and we'll add it.
+  </div>
   <!-- <div class="player-loading" v-if="store.state.track && !trackUrl">Loading</div> -->
   <div class="player" v-if="store.state.track">
     <div v-if="loading" class="track_loader">Loading Selected Song, Please wait...</div>
@@ -55,8 +58,8 @@ export default {
     const duration = ref(0);
     const loading = ref(false);
     const isDragging = ref(false);
-    const isPlaying = ref(true); // Assuming audio auto-plays. Adjust as per your need
-
+    const isPlaying = ref(true);
+    const errorTrack = ref(false); // Initialize errorTrack as false
     const togglePlayPause = () => {
       if (!audioElement.value) return;
       if (isPlaying.value) {
@@ -82,7 +85,13 @@ export default {
               },
             });
             const data = await response.json();
-
+            if (data?.code === 404) {
+              store.setTrack();
+              errorTrack.value = true;
+              setTimeout(() => {
+                errorTrack.value = false;
+              }, 15000); // 30 seconds in milliseconds
+            }
             if (data.url) {
               const fileResponse = await fetch(data.url);
               const arrayBuffer = await fileResponse.arrayBuffer();
@@ -145,6 +154,7 @@ export default {
       loading,
       togglePlayPause,
       isPlaying,
+      errorTrack,
     };
   },
 };
@@ -234,5 +244,19 @@ audio {
   font-size: 13px;
   vertical-align: middle;
   display: inline-block;
+}
+
+.error-pop {
+  position: fixed;
+  top: 10px;
+  right: 0;
+  padding: 12px;
+  background: rgb(210 75 75);
+  color: #fff;
+  font-size: 14px;
+  left: 0;
+  width: calc(10vw + 300px);
+  margin: auto;
+  text-align: center;
 }
 </style>
