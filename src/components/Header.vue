@@ -10,6 +10,7 @@
           @input="handleInput" />
         <ul class="autocomplete-results" v-show="showAutocomplete">
           <li v-for="result in autocompleteResults" @click="selectResult(result)" :key="result.id">
+            <img :src=result.cover>
             <div>{{ result.name }}</div>
           </li>
         </ul>
@@ -143,6 +144,13 @@ li {
     cursor: pointer;
     font-size: 15px;
     border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    & img {
+      width: 50px;
+    }
   }
 
   .autocomplete-results li:hover {
