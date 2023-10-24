@@ -1,6 +1,6 @@
 <template>
-  <div class="player-loading" v-if="store.state.track && !trackUrl">Loading</div>
-  <div class="player" v-if="trackUrl">
+  <!-- <div class="player-loading" v-if="store.state.track && !trackUrl">Loading</div> -->
+  <div class="player" v-if="store.state.track">
     <div v-if="loading" class="track_loader">Loading Selected Song, Please wait...</div>
 
     <div class="track_info_box">
@@ -126,7 +126,7 @@ export default {
       if (currentTime.value === audioElement.value.duration) {
         isPlaying.value = !isPlaying.value;
         // If Repeat mode on Enable Below
-        // audioElement.value.play();
+        audioElement.value.play();
       }
     };
 
@@ -149,88 +149,82 @@ export default {
 };
 </script>
 
-<style scoped> .player {
-   position: fixed;
-   bottom: 0;
-   left: 0;
-   right: 0;
-   background: #111;
-   color: #fff;
-   z-index: 10;
-   padding: 15px;
-   font-size: 0;
- }
+<style scoped>
+.player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #111;
+  color: #fff;
+  z-index: 10;
+  padding: 15px;
+  font-size: 0;
+}
 
- audio {
-   visibility: hidden;
-   width: 0;
-   height: 0;
-   opacity: 0;
- }
+audio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
 
- .player-loading {
-   width: 50%;
-   height: 90px;
-   background: #000;
-   position: fixed;
-   right: 0;
-   bottom: 0;
- }
 
- .track_info_box {
-   .track_cover {
-     width: 100px;
-     display: inline-block;
-     vertical-align: middle;
-   }
 
-   .track_sub_info {
-     width: calc(100% - 105px);
-     display: inline-block;
-     vertical-align: middle;
-     padding: 15px;
+.track_info_box {
+  .track_cover {
+    width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+  }
 
-     .track_title {
-       font-size: 22px;
-       font-weight: 500;
-       letter-spacing: 0.5px;
-       padding-bottom: 15px;
-     }
+  .track_sub_info {
+    width: calc(100% - 105px);
+    display: inline-block;
+    vertical-align: middle;
+    padding: 15px;
 
-     .track_toggler {
-       vertical-align: middle;
-     }
+    .track_title {
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      padding-bottom: 15px;
+    }
 
-     .player_range {
-       vertical-align: middle;
-       margin-left: 15px;
-       height: 5px;
-       outline: none;
-       background: #fff;
-       width: calc(15vw + 90px);
+    .track_toggler {
+      vertical-align: middle;
+    }
 
-       &::-webkit-slider-thumb {
-         transition: .3s all cubic-bezier(.815, 1.65, .4, .68);
-       }
+    .player_range {
+      vertical-align: middle;
+      margin-left: 15px;
+      height: 5px;
+      outline: none;
+      background: #fff;
+      width: calc(15vw + 90px);
 
-       &::-webkit-slider-thumb:hover {
-         transform: scale(1.3);
-       }
+      &::-webkit-slider-thumb {
+        transition: .3s all cubic-bezier(.815, 1.65, .4, .68);
+      }
 
-     }
-   }
- }
+      &::-webkit-slider-thumb:hover {
+        transform: scale(1.3);
+      }
 
- .track_loader {
-   position: absolute;
-   left: 0;
-   right: 0;
-   top: 0;
-   bottom: 0;
-   background-color: rgba(0, 0, 0, .5);
-   color: #fff;
-   font-size: 10px;
-   line-height: 130px;
-   text-align: center;
- }
+    }
+  }
+}
+
+.track_loader {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .5);
+  color: #fff;
+  font-size: 10px;
+  line-height: 130px;
+  text-align: center;
+}
 </style>
