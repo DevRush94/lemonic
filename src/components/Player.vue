@@ -125,7 +125,7 @@ export default {
     const updateSeek = () => {
       if (audioElement.value && !isDragging.value) currentTime.value = audioElement.value.currentTime;
       if (currentTime.value === audioElement.value.duration) {
-        isPlaying.value = !isPlaying.value;
+        // isPlaying.value = !isPlaying.value;
         // If Repeat mode on Enable Below
         audioElement.value.play();
       }
