@@ -32,7 +32,7 @@ li,ol,ul{list-style-type:none}
 a,button,img{outline:0;border:0;background:0 0}
 a::-moz-focus-inner{border:0}
 a,a:focus,a:hover,p a:active{color:inherit;outline:0;text-decoration:none}
-button,input,textarea{appearance:none;-webkit-appearance:none;-ms-appearance:none;outline:0;border:none;font-family:inherit;border-radius:0}
+button,textarea{appearance:none;-webkit-appearance:none;-ms-appearance:none;outline:0;border:none;font-family:inherit;border-radius:0}
 input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focus,input:-webkit-autofill:hover{-webkit-transition-delay:9999s;transition-delay:9999s}
 .box::-webkit-scrollbar{width:0;background:0 0}
 .box::-webkit-scrollbar-thumb{background:0 0}

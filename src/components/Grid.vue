@@ -18,7 +18,7 @@
             v-for="(track, trackIndex) in playlist.tracks.items"
             :key="track.track.id"
             :class="{ load: hasLoaded(playlistIndex, trackIndex) }">
-            <div class="song_box" @click="selectTrack(track.track.id)">
+            <div class="song_box" @click="selectTrack(track.track)">
               <img :src="getAlbumCover(track)" alt="Album cover">
               <div class="song_info">
                 <div class="title__name">{{ track.track.name }}</div>
@@ -79,8 +79,15 @@ export default {
   setup() {
     const store = inject('store');
 
-    const selectTrack = (id) => {
-      store.setTrackId(id);
+    const selectTrack = (selectedTrack) => {
+      const { id, duration_ms, name, album } = selectedTrack;
+      const selectedTrackObject = {
+        id,
+        duration_ms,
+        name,
+        cover: album.images[0].url,
+      };
+      store.setTrack(selectedTrackObject);
     };
     return {
       selectTrack

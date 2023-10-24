@@ -1,14 +1,14 @@
 import { reactive, readonly } from 'vue';
 
 const state = reactive({
-  trackId: null
+  track: null
 });
 
-const setTrackId = (id) => {
-  state.trackId = id;
+const setTrack = (id) => {
+  state.track = id;
 };
 
 export default {
   state: readonly(state),
-  setTrackId
+  setTrack
 };
