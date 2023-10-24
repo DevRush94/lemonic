@@ -2,7 +2,7 @@
   <header>
     <nav>
       <li>Lemonic</li>
-      <li>
+      <li class="global_search">
         <input
           type="text"
           id="search-input"
@@ -14,7 +14,7 @@
           </li>
         </ul>
       </li>
-      <li class="ham">Ham</li>
+      <!-- <li class="ham">Ham</li> -->
     </nav>
   </header>
 </template>
@@ -105,6 +105,8 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 li {
@@ -113,32 +115,38 @@ li {
   font-weight: 700;
 }
 
-.ham {
-  text-indent: -9999px;
-  overflow: hidden;
-  width: 40px;
-  height: 40px;
-  background: #333;
-}
 
-.autocomplete-results {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  background-color: #fff;
-  position: absolute;
-  border: 1px solid #ccc;
-  z-index: 1000;
-}
 
-.autocomplete-results li {
-  padding: 5px;
-  cursor: pointer;
-  font-size: 15px;
-  border: 1px solid #eee;
-}
+.global_search {
+  flex: 0 0 350px;
+  position: relative;
 
-.autocomplete-results li:hover {
-  background-color: #ccc;
+  & input {
+    width: 100%;
+    padding: 5px;
+    font-size: 18px;
+  }
+
+  .autocomplete-results {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    position: absolute;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+  }
+
+  .autocomplete-results li {
+    padding: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    border: 1px solid #eee;
+  }
+
+  .autocomplete-results li:hover {
+    background-color: #ccc;
+  }
 }
 </style>
