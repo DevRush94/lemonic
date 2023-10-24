@@ -94,6 +94,21 @@ export default {
     };
   },
   async mounted() {
+    const storedTimestamp = localStorage.getItem('token_date');
+    if (storedTimestamp) {
+      const storedDate = Math.floor(new Date(storedTimestamp).getTime() / 1000);
+      const currentDate = Math.floor(new Date().getTime() / 1000);
+      const elapsedTime = currentDate - storedDate;
+      const halfday = (24 * 60 * 60) / 2;
+      if (elapsedTime >= halfday) {
+        console.log('Token is older than 24 hours');
+        localStorage.clear();
+      }
+    } else {
+      console.log('Token date not found in local storage');
+      localStorage.clear();
+    }
+
     this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
     this.playlistTracks = JSON.parse(localStorage.getItem('subPlaylist'));
 
@@ -174,6 +189,7 @@ export default {
       });
       const data = await response.json();
       localStorage.setItem('token', data.access_token);
+      localStorage.setItem('token_date', new Date());
     },
     async getFeaturedplaylists() {
       const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists`, {
