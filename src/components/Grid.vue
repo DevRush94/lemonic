@@ -95,11 +95,12 @@ export default {
   },
   async mounted() {
     const storedTimestamp = localStorage.getItem('token_date');
+    const expires_in = Math.floor(localStorage.getItem('expires_in')) ? Math.floor(localStorage.getItem('expires_in')) : 3600
     if (storedTimestamp) {
       const storedDate = Math.floor(new Date(storedTimestamp).getTime() / 1000);
       const currentDate = Math.floor(new Date().getTime() / 1000);
       const elapsedTime = currentDate - storedDate;
-      if (elapsedTime >= localStorage.getItem('expires_in') ? localStorage.getItem('expires_in') : 3600) {
+      if (elapsedTime >= expires_in) {
         console.log('Token is older');
         localStorage.clear();
       }
