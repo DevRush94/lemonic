@@ -25,6 +25,7 @@
           @mousedown="startDragging"
           @mouseup="stopDragging"
           @change="stopDragging" />
+        <span class="track_duration">{{ Math.floor(Math.floor(store.state.track.duration_ms / 1000) / 60) + ":" + Math.floor(store.state.track.duration_ms / 1000) % 60 }}</span>
       </div>
     </div>
 
@@ -201,7 +202,8 @@ audio {
       height: 5px;
       outline: none;
       background: #fff;
-      width: calc(15vw + 90px);
+      width: calc(15vw + 50px);
+      margin-right: 20px;
 
       &::-webkit-slider-thumb {
         transition: .3s all cubic-bezier(.815, 1.65, .4, .68);
@@ -226,5 +228,11 @@ audio {
   font-size: 10px;
   line-height: 130px;
   text-align: center;
+}
+
+.track_duration {
+  font-size: 13px;
+  vertical-align: middle;
+  display: inline-block;
 }
 </style>
