@@ -99,9 +99,8 @@ export default {
       const storedDate = Math.floor(new Date(storedTimestamp).getTime() / 1000);
       const currentDate = Math.floor(new Date().getTime() / 1000);
       const elapsedTime = currentDate - storedDate;
-      const halfday = (24 * 60 * 60) / 2;
-      if (elapsedTime >= halfday) {
-        console.log('Token is older than 24 hours');
+      if (elapsedTime >= localStorage.getItem('expires_in') ? localStorage.getItem('expires_in') : 3600) {
+        console.log('Token is older');
         localStorage.clear();
       }
     } else {
@@ -188,11 +187,13 @@ export default {
         body: `grant_type=client_credentials`
       });
       const data = await response.json();
+      console.log(data);
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('token_date', new Date());
+      localStorage.setItem('expires_in', data.expires_in);
     },
     async getFeaturedplaylists() {
-      const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists`, {
+      const response = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?country=IN`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
