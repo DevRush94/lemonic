@@ -39,7 +39,7 @@ input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focu
 .box::-webkit-scrollbar-thumb:hover{background:0 0}
 .box{scrollbar-color:transparent}
 .box{display:flex;align-items:center;gap:2vw 1vw;flex-wrap:nowrap;max-width:100%;overflow-x:auto;overflow-y:hidden}
-.padder{padding:100px 15px}
+.padder{padding:100px 15px 200px}
 .playList_layout h3{padding:15px 0}
 .grid{flex:1 0 auto;text-align:center;display:flex;filter:blur(10px);justify-content:center;transform:translate(150%,0);opacity:0;transition:.5s all cubic-bezier(.75,-.5,.21,1.5);will-change:transform}
 .load.grid{transform:none;opacity:1;filter:blur(0)}
