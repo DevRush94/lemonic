@@ -102,11 +102,11 @@ export default {
       const elapsedTime = currentDate - storedDate;
       if (elapsedTime >= expires_in) {
         console.log('Token is older');
-        localStorage.clear();
+        await this.getAccessToken();
       }
     } else {
       console.log('Token date not found in local storage');
-      localStorage.clear();
+      await this.getAccessToken();
     }
 
     this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
