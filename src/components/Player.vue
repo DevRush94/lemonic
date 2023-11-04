@@ -97,6 +97,15 @@ export default {
               const arrayBuffer = await fileResponse.arrayBuffer();
               const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
               trackUrl.value = URL.createObjectURL(blob);
+              document.title = "Lemonic - " + newTrack.name;
+              if (window.innerWidth < 768) {
+                const linkElement = document.createElement('link');
+                linkElement.rel = 'icon';
+                linkElement.type = 'image/png';
+                linkElement.href = newTrack.cover;
+                const headElement = document.querySelector('head');
+                headElement.appendChild(linkElement);
+              }
             }
           } catch (error) {
             console.error('Error fetching track data:', error);
