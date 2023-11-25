@@ -127,10 +127,10 @@ header {
   & .logo {
     padding: 15px 30px;
     font-size: 0;
-
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
     @media screen and (max-width:767px) {
-      width: 100%;
-      text-align: center;
       padding: 0;
       padding-bottom: 10px;
     }
