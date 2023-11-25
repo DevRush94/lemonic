@@ -199,20 +199,25 @@ audio {
   }
 
   .track_sub_info {
-    width: calc(100% - 105px);
+    width: calc(100% - 100px);
     display: inline-block;
     vertical-align: middle;
-    padding: 15px;
+    padding-left: 15px;
 
     .track_title {
       font-size: 22px;
       font-weight: 500;
       letter-spacing: 0.5px;
       padding-bottom: 15px;
+      @media screen and (max-width:767px) {
+        font-size: 14px;
+        padding-bottom: 10px;
+      }
     }
 
     .track_toggler {
       vertical-align: middle;
+      height: 40px;
     }
 
     .player_range {
@@ -253,6 +258,9 @@ audio {
   font-size: 13px;
   vertical-align: middle;
   display: inline-block;
+  @media screen and (max-width:350px) {
+    display: none;
+  }
 }
 
 .error-pop {

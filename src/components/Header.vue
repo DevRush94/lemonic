@@ -47,7 +47,7 @@ export default {
     const handleInput = (event) => {
       clearTimeout(timeout);
       const inputValue = event.target.value;
-      showAutocomplete.value = inputValue.length > 0;
+      showAutocomplete.value = inputValue.length;
 
       // Set a new timeout to trigger the API request after 300ms of inactivity
       timeout = setTimeout(() => {
@@ -117,6 +117,11 @@ header {
     padding: 15px 30px;
     background: #171717;
     font-size: 0;
+
+    @media screen and (max-width:767px) {
+      width: 100%;
+      text-align: center;
+    }
   }
 }
 
@@ -126,6 +131,9 @@ nav {
   flex-wrap: wrap;
   gap: 20px;
 
+  @media screen and (max-width:767px) {
+    gap: 0;
+  }
 }
 
 li {
@@ -137,6 +145,10 @@ li {
 
     margin-left: auto;
     margin-right: 20px;
+
+    @media screen and (max-width:767px) {
+      margin: 0;
+    }
 
     & button {
       border-radius: 5px;
@@ -150,6 +162,15 @@ li {
       gap: 5px;
       font-weight: 500;
       font-size: 14px;
+
+      @media screen and (max-width:767px) {
+        width: auto;
+        padding: 15px;
+
+        & span {
+          display: none;
+        }
+      }
     }
 
   }
@@ -158,8 +179,13 @@ li {
 
 
 .global_search {
-  flex: 0 0 300px;
+  flex: 0 0 200px;
   position: relative;
+
+  @media screen and (max-width:767px) {
+    flex: 0 0 calc(100% - 80px);
+    padding: 15px;
+  }
 
   & input {
     width: 100%;
@@ -201,5 +227,4 @@ li {
   .autocomplete-results li:hover {
     background-color: #ccc;
   }
-}
-</style>
+}</style>
