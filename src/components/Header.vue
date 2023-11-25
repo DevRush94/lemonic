@@ -114,12 +114,14 @@ export default {
 
 <style scoped>
 header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 1000;
   border-bottom: 1px solid rgba(255, 255, 255, 0.20);
   background: #171717;
+  box-shadow: 0px 5px 20px #171717;
 
   @media screen and (max-width:767px) {
     padding: 15px;
