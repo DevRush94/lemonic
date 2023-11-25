@@ -13,6 +13,12 @@
           id="search-input"
           placeholder="Search..."
           @input="handleInput" />
+        <span class="search_icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M7.66668 13.8674C11.1645 13.8674 14 11.0897 14 7.66331C14 4.23689 11.1645 1.45923 7.66668 1.45923C4.16887 1.45923 1.33334 4.23689 1.33334 7.66331C1.33334 11.0897 4.16887 13.8674 7.66668 13.8674Z" stroke="#D3D3D3" stroke-opacity="0.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M14.6667 14.5204L13.3333 13.2143" stroke="#D3D3D3" stroke-opacity="0.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
         <ul class="autocomplete-results" v-show="showAutocomplete">
           <li v-for="result in autocompleteResults" @click="selectResult(result)" :key="result.id">
             <img :src=result.cover>
@@ -112,15 +118,21 @@ header {
   top: 0;
   left: 0;
   right: 0;
+  background: #171717;
+
+  @media screen and (max-width:767px) {
+    padding: 15px;
+  }
 
   & .logo {
     padding: 15px 30px;
-    background: #171717;
     font-size: 0;
 
     @media screen and (max-width:767px) {
       width: 100%;
       text-align: center;
+      padding: 0;
+      padding-bottom: 10px;
     }
   }
 }
@@ -144,10 +156,11 @@ li {
   &.setting {
 
     margin-left: auto;
-    margin-right: 20px;
+    margin-right: 15px;
 
     @media screen and (max-width:767px) {
-      margin: 0;
+      margin-left: 15px;
+      margin-right: 0;
     }
 
     & button {
@@ -165,7 +178,7 @@ li {
 
       @media screen and (max-width:767px) {
         width: auto;
-        padding: 15px;
+        padding: 10px;
 
         & span {
           display: none;
@@ -179,24 +192,33 @@ li {
 
 
 .global_search {
-  flex: 0 0 200px;
+  flex: 0 0 300px;
   position: relative;
+  background: #232323;
 
   @media screen and (max-width:767px) {
-    flex: 0 0 calc(100% - 80px);
-    padding: 15px;
+    flex: 0 0 calc(100% - 70px);
   }
 
   & input {
     width: 100%;
-    padding: 14px 28px;
+    padding: 12px 15px 12px 40px;
     border-radius: 5px;
     border: 1px solid rgba(211, 211, 211, 0.20);
-    background: #232323;
     color: rgba(255, 255, 255, 0.50);
+    background: transparent;
     font-size: 14px;
     font-weight: 400;
-    letter-spacing: -0.408px;
+    letter-spacing: -0.4px;
+    position: relative;
+    z-index: 1;
+  }
+
+  & .search_icon {
+    position: absolute;
+    z-index: 0;
+    left: 14px;
+    top: 14px;
   }
 
   .autocomplete-results {
@@ -227,4 +249,5 @@ li {
   .autocomplete-results li:hover {
     background-color: #ccc;
   }
-}</style>
+}
+</style>
