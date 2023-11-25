@@ -118,6 +118,7 @@ header {
   top: 0;
   left: 0;
   right: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.20);
   background: #171717;
 
   @media screen and (max-width:767px) {
@@ -130,6 +131,7 @@ header {
     width: 100%;
     max-width: 300px;
     text-align: center;
+
     @media screen and (max-width:767px) {
       padding: 0;
       padding-bottom: 10px;
