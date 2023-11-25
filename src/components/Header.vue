@@ -11,7 +11,7 @@
         <input
           type="text"
           id="search-input"
-          placeholder="Search..."
+          placeholder="Search for songs, artist, etc."
           @input="handleInput" />
         <span class="search_icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -202,7 +202,7 @@ li {
 
   & input {
     width: 100%;
-    padding: 12px 15px 12px 40px;
+    padding: 13px 15px 12px 40px;
     border-radius: 5px;
     border: 1px solid rgba(211, 211, 211, 0.20);
     color: rgba(255, 255, 255, 0.50);
@@ -217,8 +217,8 @@ li {
   & .search_icon {
     position: absolute;
     z-index: 0;
-    left: 14px;
-    top: 14px;
+    left: 15px;
+    top: 15px;
   }
 
   .autocomplete-results {
