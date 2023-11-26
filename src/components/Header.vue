@@ -131,7 +131,7 @@ header {
     padding: 15px 30px;
     font-size: 0;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     text-align: center;
 
     @media screen and (max-width:767px) {

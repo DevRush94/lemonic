@@ -1,6 +1,6 @@
 <template>
-  <main class="padder" v-if="!loading">
-    <div class="playList_layout" v-for="(playlist, playlistIndex) in subPlaylist" :key="'playlist-' + playlistIndex">
+  <main class="song_grid" v-if="!loading">
+    <div class="playList_layout" v-for="(playlist, playlistIndex) in currentPlaylist" :key="'playlist-' + playlistIndex">
       <h3>{{ playlist.name }}</h3>
       <div class="dragger">
 
@@ -8,8 +8,7 @@
           <li
             class="grid"
             v-for="(track, trackIndex) in playlist.tracks.items"
-            :key="track.track.id"
-            :class="{ load: hasLoaded(playlistIndex, trackIndex) }">
+            :key="track.track.id">
             <div class="song_box" @click="selectTrack(track.track)">
               <img :src="getAlbumCover(track)" alt="Album cover">
               <div class="song_info">
@@ -52,17 +51,17 @@ export default {
       mainData: null,
       playlistTracks: [],
       subPlaylist: [],
+      currentPlaylist: [],
       scrolling: false,
       scrollDirection: null,
       currentPlaylistId: null,
       loadTimes: {},
-      showScrollLeft: {},
-      showScrollRight: {}
     };
   },
   setup() {
     const store = inject('store');
 
+    // Use eventBus from createApp instance
     const selectTrack = (selectedTrack) => {
       const { id, duration_ms, name, album } = selectedTrack;
       const selectedTrackObject = {
@@ -106,7 +105,7 @@ export default {
 
     this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
     this.playlistTracks = JSON.parse(localStorage.getItem('subPlaylist'));
-
+    this.currentPlaylist = JSON.parse(localStorage.getItem('currentPlaylist'));
     if (!localStorage.getItem('token')) {
       await this.getAccessToken();
     }
@@ -118,22 +117,8 @@ export default {
       this.loading = false;
     }
   },
+
   methods: {
-    hasLoaded(playlistIndex, trackIndex) {
-      const key = `${playlistIndex}-${trackIndex}`;
-      const currentTime = Date.now();
-
-      // For tracks after the 10th, load by default
-      if (trackIndex >= 30) {
-        return true;
-      }
-
-      if (!this.loadTimes[key]) {
-        this.loadTimes[key] = currentTime + (playlistIndex * this.subPlaylist[playlistIndex].tracks.items.length + trackIndex) * 100;
-      }
-
-      return currentTime > this.loadTimes[key];
-    },
 
     async getAccessToken() {
       const response = await fetch('https://accounts.spotify.com/api/token', {
@@ -178,6 +163,9 @@ export default {
         allPlaylistsData.push(playlistData);
       }
       this.playlistTracks = allPlaylistsData[0].tracks.items;
+      if (!localStorage.getItem('currentPlaylist')) {
+        localStorage.setItem('currentPlaylist', JSON.stringify(allPlaylistsData));
+      }
       localStorage.setItem("subPlaylist", JSON.stringify(allPlaylistsData));
       this.cacheLoad()
     },
@@ -195,25 +183,7 @@ export default {
         }
       }
 
-      // Start cascading effect
-      this.$nextTick(() => {
-        this.startCascadingEffect();
-      });
-    },
 
-    startCascadingEffect() {
-      const timePerTrack = 50;  // 2000ms for 10 tracks
-      for (let playlistIndex = 0; playlistIndex < this.subPlaylist.length; playlistIndex++) {
-        for (let trackIndex = 0; trackIndex < 30 && trackIndex < this.subPlaylist[playlistIndex].tracks.items.length; trackIndex++) {
-          const key = `${playlistIndex}-${trackIndex}`;
-          // Calculating the delay for each track
-          const delay = (playlistIndex * 10 + trackIndex) * timePerTrack;
-
-          setTimeout(() => {
-            this.loadTimes[key] = 0.1;  // Set to past time to trigger the effect
-          }, delay);
-        }
-      }
     },
 
     getAlbumCover(track) {

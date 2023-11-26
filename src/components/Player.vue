@@ -44,6 +44,7 @@
 
 
   </div>
+  <div class="artifical-pad" v-if="store.state.track"></div>
 </template>
 
 <script>
@@ -209,6 +210,7 @@ audio {
       font-weight: 500;
       letter-spacing: 0.5px;
       padding-bottom: 15px;
+
       @media screen and (max-width:767px) {
         font-size: 14px;
         padding-bottom: 10px;
@@ -258,6 +260,7 @@ audio {
   font-size: 13px;
   vertical-align: middle;
   display: inline-block;
+
   @media screen and (max-width:350px) {
     display: none;
   }
@@ -276,4 +279,7 @@ audio {
   margin: auto;
   text-align: center;
 }
-</style>
+
+.artifical-pad {
+  padding-bottom: 130px;
+}</style>
