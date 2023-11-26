@@ -1,6 +1,6 @@
 <template>
   <main class="song_grid" v-if="!loading">
-    <div class="playList_layout" v-for="(playlist, playlistIndex) in currentPlaylist" :key="'playlist-' + playlistIndex">
+    <div class="playList_layout" v-for="(playlist, playlistIndex) in currentPlaylist.slice().reverse()" :key="'playlist-' + playlistIndex">
       <h3>{{ playlist.name }}</h3>
       <div class="dragger">
 
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { inject } from 'vue';
+import { inject, ref, watch } from 'vue';
 
 const clientId = '4875732b46fe4b2b8671c683ea012688';
 const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
@@ -60,7 +60,17 @@ export default {
   },
   setup() {
     const store = inject('store');
+    const currentPlaylist = ref([]);
 
+    // Watch for changes in the store's currentPlaylist
+    watch(() => store.state.currentPlaylist, (newCurrentPlaylist) => {
+      // Update this.currentPlaylist when the store's currentPlaylist changes
+      currentPlaylist.value = newCurrentPlaylist;
+    });
+    const AlsoToSidebar = (allPlaylistsData) => {
+      console.log("object");
+      store.SetSidebarPlaylist(allPlaylistsData)
+    }
     // Use eventBus from createApp instance
     const selectTrack = (selectedTrack) => {
       const { id, duration_ms, name, album } = selectedTrack;
@@ -72,8 +82,11 @@ export default {
       };
       store.setTrack(selectedTrackObject);
     };
+
     return {
-      selectTrack
+      selectTrack,
+      currentPlaylist, // expose currentPlaylist to the template
+      AlsoToSidebar,
     };
   },
   async mounted() {
@@ -147,8 +160,6 @@ export default {
       this.mainData = data;
       localStorage.setItem("mainPlaylist", JSON.stringify(this.mainData));
       localStorage.setItem('lastFetched', new Date());
-      console.log(data);
-      const numberOfPlaylists = data.playlists.items.length;
       let allPlaylistsData = [];
       for (let i = 0; i < 1; i++) {
         const playlistResponse = await fetch(data.playlists.items[i].href, {
@@ -165,6 +176,8 @@ export default {
       this.playlistTracks = allPlaylistsData[0].tracks.items;
       if (!localStorage.getItem('currentPlaylist')) {
         localStorage.setItem('currentPlaylist', JSON.stringify(allPlaylistsData));
+        this.currentPlaylist = allPlaylistsData
+        this.AlsoToSidebar(allPlaylistsData)
       }
       localStorage.setItem("subPlaylist", JSON.stringify(allPlaylistsData));
       this.cacheLoad()

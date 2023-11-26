@@ -18,30 +18,37 @@
 </template>
 
 <script>
+import { ref, inject, watch } from 'vue';
 
 export default {
-  data() {
-    return {
-      playlists: [],
-    };
-  },
-  mounted() {
+  setup() {
+    const store = inject('store');
+    const playlists = ref([]);
+    watch(
+      () => store.state.sidebarPlaylist,
+      async () => {
+        const mainPlaylist = localStorage.getItem('mainPlaylist');
+        if (mainPlaylist) {
+          const playlistsData = JSON.parse(mainPlaylist).playlists.items;
+          playlists.value = playlistsData;
+        }
+      }
+    );
     // Fetch playlists from localStorage
     const mainPlaylist = localStorage.getItem('mainPlaylist');
-
     if (mainPlaylist) {
       const playlistsData = JSON.parse(mainPlaylist).playlists.items;
-      this.playlists = playlistsData;
+      playlists.value = playlistsData;
     }
-  },
-  methods: {
-    getAlbumCover(track) {
+
+    const getAlbumCover = (track) => {
       if (track && track.images && track.images[0]) {
         return track.images[0].url;
       }
       return '';
-    },
-    async selectPlaylist(playlist) {
+    };
+
+    const selectPlaylist = async (playlist) => {
       const playlistResponse = await fetch(playlist.tracks.href, {
         method: 'GET',
         headers: {
@@ -50,12 +57,20 @@ export default {
         }
       });
       const playlistData = await playlistResponse.json();
-      localStorage.setItem('currentPlaylist', JSON.stringify([JSON.parse(localStorage.getItem('subPlaylist'))[0], { ...playlist, tracks: {  ...playlistData } }]));
-    }
-  }
+      const updatedCurrentPlaylist = JSON.stringify([JSON.parse(localStorage.getItem('subPlaylist'))[0], { ...playlist, tracks: { ...playlistData } }]);
+      localStorage.setItem('currentPlaylist', updatedCurrentPlaylist);
+
+      // Use store.commit to update the state in the store
+      store.setCurrentPlaylist(updatedCurrentPlaylist);
+    };
+    return {
+      playlists,
+      getAlbumCover,
+      selectPlaylist,
+    };
+  },
 };
 </script>
-
 
 <style scoped>
 .sidebar {
@@ -64,7 +79,7 @@ export default {
   flex: 0 0 320px;
   color: #fff;
 
-  @media screen and (max-width:767px) {
+  @media screen and (max-width: 767px) {
     display: none;
   }
 }
@@ -90,14 +105,6 @@ img {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-}
-
-router-link {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  display: block;
 }
 
 .playlist_sidebar {
