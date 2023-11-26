@@ -68,7 +68,6 @@ export default {
       currentPlaylist.value = newCurrentPlaylist;
     });
     const AlsoToSidebar = (allPlaylistsData) => {
-      console.log("object");
       store.SetSidebarPlaylist(allPlaylistsData)
     }
     // Use eventBus from createApp instance
@@ -143,7 +142,6 @@ export default {
         body: `grant_type=client_credentials`
       });
       const data = await response.json();
-      console.log(data);
       localStorage.setItem('token', data.access_token);
       localStorage.setItem('token_date', new Date());
       localStorage.setItem('expires_in', data.expires_in);

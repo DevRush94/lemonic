@@ -74,7 +74,6 @@ export default {
     watch(
       () => store.state.track,
       async (newTrack, oldTrack) => {
-        console.log(newTrack);
         if (newTrack) {
           loading.value = true;
 
