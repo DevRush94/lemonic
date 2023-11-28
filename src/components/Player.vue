@@ -25,6 +25,7 @@
               <path d="M45.563 29.174l-22-15c-.307-.208-.703-.231-1.031-.058A1 1 0 0 0 22 15v30a1 1 0 0 0 .533.884A.99.99 0 0 0 23 46a1 1 0 0 0 .563-.174l22-15a1 1 0 0 0 0-1.652zM24 43.107V16.893L43.225 30 24 43.107zM30 0C13.458 0 0 13.458 0 30s13.458 30 30 30 30-13.458 30-30S46.542 0 30 0zm0 58C14.561 58 2 45.439 2 30S14.561 2 30 2s28 12.561 28 28-12.561 28-28 28z" />
             </svg> -->
           </button>
+          <span class="track_duration">{{ Math.floor(Math.floor(store.state.track.duration_ms / 1000) / 60) + ":" + Math.floor(store.state.track.duration_ms / 1000) % 60 }}</span>
         </div>
         <input
           class="player_range"
@@ -35,7 +36,6 @@
           @mousedown="startDragging"
           @mouseup="stopDragging"
           @change="stopDragging" />
-        <span class="track_duration">{{ Math.floor(Math.floor(store.state.track.duration_ms / 1000) / 60) + ":" + Math.floor(store.state.track.duration_ms / 1000) % 60 }}</span>
       </div>
       <div class="expand_icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 2666.667 2666.667">
@@ -189,13 +189,23 @@ export default {
   background: #171717;
   color: #fff;
   z-index: 10;
-  padding: 15px;
+  padding: 10px;
   font-size: 0;
-  width: 100%;
-  max-width: 465px;
+  width: calc(100% - 30px);
+  max-width: 450px;
   overflow: hidden;
   border-radius: 10px;
-  height: 150px;
+  height: 130px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+
+  @media screen and (max-width:767px) {
+    bottom: 0;
+    right: 0;
+    box-shadow: none;
+    border-radius: 0;
+    width: 100%;
+
+  }
 }
 
 audio {
@@ -210,7 +220,7 @@ audio {
 .track_info_box {
 
   .track_cover {
-    width: 150px;
+    width: 130px;
     left: 0;
     top: 0;
     bottom: 0;
@@ -219,7 +229,13 @@ audio {
   }
 
   .track_sub_info {
-    padding-left: 150px;
+    padding-left: 130px;
+
+    & .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
     & .track_artist {
       font-size: 11px;
@@ -240,7 +256,6 @@ audio {
 
       @media screen and (max-width:767px) {
         font-size: 14px;
-        padding-bottom: 10px;
       }
     }
 
@@ -251,11 +266,13 @@ audio {
 
     .player_range {
       vertical-align: middle;
-
       height: 3px;
       outline: none;
       background: #fff;
-      width: calc(15vw + 50px);
+      width: calc(100% - 35px);
+      margin-top: 15px;
+      color: #FAFA33;
+      filter: hue-rotate(200deg) brightness(2.5);
 
       &::-webkit-slider-thumb {
         transition: .3s all cubic-bezier(.815, 1.65, .4, .68);
@@ -280,6 +297,7 @@ audio {
   font-size: 10px;
   line-height: 130px;
   text-align: center;
+  z-index: 1;
 }
 
 .track_duration {
@@ -312,7 +330,9 @@ audio {
   bottom: 0;
 }
 
-.artifical-pad {
-  padding-bottom: 130px;
+@media screen and (max-width:767px) {
+  .artifical-pad {
+    padding-bottom: 145px;
+  }
 }
 </style>

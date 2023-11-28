@@ -1,3 +1,12 @@
+<template>
+  <Header />
+  <div class="main-wrappy">
+    <Sidebar />
+    <Grid />
+  </div>
+  <Player />
+</template>
+
 <script>
 import { provide } from 'vue';
 import store from './store';
@@ -19,11 +28,3 @@ export default {
 }
 </script>
 
-<template>
-  <Header />
-  <div class="main-wrappy">
-    <Sidebar />
-    <Grid />
-  </div>
-  <Player />
-</template>
