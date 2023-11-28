@@ -45,7 +45,7 @@ export default {
       const inputValue = event.target.value;
       timeout = setTimeout(() => {
         getAutocompleteResults(inputValue);
-      }, 300);
+      }, 600);
     };
     const getAutocompleteResults = async (query) => {
       if (query) {

@@ -72,11 +72,12 @@ export default {
     }
     // Use eventBus from createApp instance
     const selectTrack = (selectedTrack) => {
-      const { id, duration_ms, name, album } = selectedTrack;
+      const { id, duration_ms, name, artists, album } = selectedTrack;
       const selectedTrackObject = {
         id,
         duration_ms,
         name,
+        artists: artists.map(artist => artist.name).join(", "),
         cover: album.images[0].url,
       };
       store.setTrack(selectedTrackObject);
