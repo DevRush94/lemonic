@@ -138,7 +138,6 @@ export default {
     };
 
     const setNowPlaying = (index) => {
-      console.log(FullPlaylist.value);
       FullPlaylist.value.forEach((track, i) => { track.isNowPlaying = i === index; });
     };
     const togglePrev = () => {
@@ -255,7 +254,7 @@ export default {
       if (currentTime.value === audioElement.value.duration) {
         // isPlaying.value = !isPlaying.value;
         // If Repeat mode on Enable Below
-        audioElement.value.play();
+        FullPlaylist.value.length === 1 ? audioElement.value.play() : toggleNext();
       }
     };
 
