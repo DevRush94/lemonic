@@ -1,12 +1,13 @@
+import { track } from '@vue/reactivity';
 import { reactive, readonly } from 'vue';
 
 const state = reactive({
-  track: null,
+  track: [],
   currentPlaylist: null // New state for the current active playlist
 });
 
 const setTrack = (id) => {
-  state.track = id;
+  state.track = [...state.track, id];
 };
 
 const setCurrentPlaylist = (playlist) => {
