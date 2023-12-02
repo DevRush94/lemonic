@@ -121,12 +121,13 @@ export default {
     const isPlaying = ref(true);
     const PlayerView = ref(0);
     const errorTrack = ref(false);
-    const currentVolume = ref(1);
+    const currentVolume = ref(localStorage.getItem('volume') ? localStorage.getItem('volume') : 1);
     const FullPlaylist = ref([]);
     let currentTrack = ref(null);
 
     const changeVolume = () => {
       if (audioElement.value) audioElement.value.volume = currentVolume.value;
+      localStorage.setItem('volume', currentVolume.value)
     };
 
     const togglePlayPause = () => {
@@ -239,6 +240,7 @@ export default {
             console.error('Error fetching track data:', error);
           } finally {
             setNowPlaying(FullPlaylist.value.length - 1)
+            setTimeout(() => changeVolume())
             loading.value = false;
           }
         }
