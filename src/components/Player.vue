@@ -217,10 +217,7 @@ export default {
               }, 15000);
             }
             if (data.url) {
-              const fileResponse = await fetch(data.url);
-              const arrayBuffer = await fileResponse.arrayBuffer();
-              const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
-              const objectURL = URL.createObjectURL(blob);
+              const objectURL = data.url;
 
               FullPlaylist.value.push({
                 ...newTrack,
@@ -237,18 +234,37 @@ export default {
                 const headElement = document.querySelector('head');
                 headElement.appendChild(linkElement);
               }
+
+              setNowPlaying(FullPlaylist.value.length - 1);
+              setTimeout(() => changeVolume());
+              loading.value = false;
+              // Background fetch without waiting
+              BgFetch(data, newTrack);
             }
           } catch (error) {
             console.error('Error fetching track data:', error);
-          } finally {
-            setNowPlaying(FullPlaylist.value.length - 1)
-            setTimeout(() => changeVolume())
-            loading.value = false;
           }
         }
       }
     );
 
+    const BgFetch = (data, newTrack) => {
+      // Using a Promise to perform the background fetch
+      Promise.resolve().then(async () => {
+        const fileResponse = await fetch(data.url);
+        const arrayBuffer = await fileResponse.arrayBuffer();
+        const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
+        const objectURL = URL.createObjectURL(blob);
+        const songIDFetched = FullPlaylist.value.findIndex(track => track.id === newTrack.id);
+        const tempTime = currentTime.value + 0.1; // Added 0.1 sec to add and seek properly
+        FullPlaylist.value[songIDFetched] = {
+          ...FullPlaylist.value[songIDFetched],
+          objectURL: objectURL,
+        };
+        //To Fix setting the same time
+        setTimeout(() => { audioElement.value.currentTime = tempTime })
+      });
+    };
 
 
     const startDragging = () => {
