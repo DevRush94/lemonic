@@ -94,6 +94,7 @@ audio{visibility:hidden;width:0;height:0;opacity:0}
 .artifical-pad{padding-bottom:145px}
 .track_info_box .track_sub_info .track_title{font-size:14px}
 .player{bottom:0;right:0;box-shadow:none;border-radius:0;width:100%}
+.player.player.max_player{height:calc(100vh - 160px)}
 }
 @media screen and (max-width:350px){
 .track_duration{display:none}
