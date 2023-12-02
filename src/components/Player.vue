@@ -6,12 +6,12 @@
   <div :class="['player', getPlayerViewClass()]" v-if="FullPlaylist.length">
     <div v-if="loading" class="track_loader">Loading Selected Song, Please wait...</div>
 
-    <div class="track_info_box" v-for="track in FullPlaylist" :key="track.id">
-      <div class="just_wrapper" v-if="track.isNowPlaying">
-        <img class="track_cover" :src="track.cover" :alt="track.name">
+    <div class="track_info_box" v-if="currentTrack">
+      <div class="just_wrapper">
+        <img class="track_cover" :src="currentTrack.cover" :alt="currentTrack.name" />
         <div class="track_sub_info">
-          <div class="track_title">{{ track.name }}</div>
-          <div class="track_artist">{{ track.artists }}</div>
+          <div class="track_title">{{ currentTrack.name }}</div>
+          <div class="track_artist">{{ currentTrack.artists }}</div>
           <div class="controls">
             <div class="inner_control">
               <button class="track_prev" @click="togglePrev">
@@ -44,7 +44,7 @@
                   <path d="M10.233 8.433L8 10.667 5.767 8.433" />
                 </svg>
               </button>
-              <span class="track_duration">{{ formatDuration(store.state.track.duration_ms) }}</span>
+              <span class="track_duration">{{ formatDuration(currentTrack.duration_ms) }}</span>
             </div>
           </div>
           <input
@@ -62,7 +62,7 @@
             v-model="currentVolume"
             :min="0"
             :max="1"
-            step="0.1"
+            step="0.01"
             @input="changeVolume" />
 
           <div class="expand_icon" @click="toggleView">
@@ -74,12 +74,14 @@
       </div>
     </div>
 
-    <div class="playlist_box" v-for="track in FullPlaylist" :key="track.id" style="font-size: 10px;" v-if="getPlayerViewClass() === 'max_player'">
-      <div v-bind:class="{ current: track.isNowPlaying }" class="playlist_list" style="display: flex; gap: 10px; border-top: 1px solid #eee; padding: 10px;">
-        <img class="playlist_img" :src="track.cover" :alt="track.name" style="width: 40px;">
-        <div>
-          <div class="playlist_title">{{ track.name }}</div>
-          <div class="playlist_artist">{{ track.artists }}</div>
+    <div class="playlist_box" v-if="getPlayerViewClass() === 'max_player'">
+      <div class="playlist_list" v-for="track in FullPlaylist" :key="track.id" style="font-size: 10px;">
+        <div v-bind:class="{ current: track.isNowPlaying }" class="playlist_flex" style="display: flex; gap: 10px; border-top: 1px solid #eee; padding: 10px;">
+          <img class="playlist_img" :src="track.cover" :alt="track.name" style="width: 40px;">
+          <div>
+            <div class="playlist_title">{{ track.name }}</div>
+            <div class="playlist_artist">{{ track.artists }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -118,6 +120,7 @@ export default {
     const errorTrack = ref(false);
     const currentVolume = ref(1);
     const FullPlaylist = ref([]);
+    let currentTrack = ref(null);
 
     const changeVolume = () => {
       if (audioElement.value) audioElement.value.volume = currentVolume.value;
@@ -134,14 +137,11 @@ export default {
     };
 
     const toggleDownload = () => {
-      if (trackUrl.value) {
+      if (currentTrack && currentTrack.value) {
         const link = document.createElement('a');
-        link.href = trackUrl.value;
-        link.download = `${store.state.track.name} - ${store.state.track.artists} [320kbps][Lemonic].mp3`;
-        link.click();
-        setTimeout(() => {
-          link.remove();
-        });
+        link.href = currentTrack.value.objectURL;
+        link.download = `${currentTrack.value.name} - ${currentTrack.value.artists} [320kbps][Lemonic].mp3`;
+        link.click(); setTimeout(() => { link.remove(); });
       }
     };
 
@@ -152,6 +152,7 @@ export default {
 
     const setNowPlaying = (index) => {
       FullPlaylist.value.forEach((track, i) => { track.isNowPlaying = i === index; });
+      currentTrack.value = { ...(FullPlaylist.value.find(track => track.isNowPlaying) || {}) };
     };
     const togglePrev = () => {
       const currentIndex = FullPlaylist.value.findIndex(track => track.isNowPlaying);
@@ -303,6 +304,7 @@ export default {
       togglePrev,
       toggleNext,
       getCurrentTrackObjectURL,
+      currentTrack,
     };
   },
 };
