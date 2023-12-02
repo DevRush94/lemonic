@@ -195,6 +195,12 @@ export default {
         if (newTrack) {
           loading.value = true;
 
+          const existingSong = FullPlaylist.value.findIndex(track => track.id === newTrack.id);
+          if (existingSong !== -1) {
+            setNowPlaying(existingSong);
+            loading.value = false;
+            return;
+          }
           try {
             const response = await fetch(`https://lemonic.viperadnan.com/api/raw/track/${newTrack.id}`, {
               method: 'GET',
@@ -216,10 +222,6 @@ export default {
               const blob = new Blob([arrayBuffer], { type: 'audio/mp3' });
               const objectURL = URL.createObjectURL(blob);
 
-              // Update FullPlaylist
-              // Get the last track from newTrackArray
-
-              // Update FullPlaylist.value
               FullPlaylist.value.push({
                 ...newTrack,
                 isNowPlaying: true,
