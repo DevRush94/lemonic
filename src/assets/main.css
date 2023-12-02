@@ -90,11 +90,13 @@ audio{visibility:hidden;width:0;height:0;opacity:0}
 .expand_icon{position:absolute;right:0;bottom:0}
 .current.playlist_flex{background:rgba(250,248,80 ,.15)}
 .seekbar_box{display:flex;align-items:center;justify-content:space-between;padding-right:35px;padding-top:7px}
+.playlist_box{height:calc(100vh - 280px);overflow-y:scroll}
+.playlist_box::-webkit-scrollbar{display:none}
 @media screen and (max-width:767px){
 .artifical-pad{padding-bottom:145px}
 .track_info_box .track_sub_info .track_title{font-size:14px}
 .player{bottom:0;right:0;box-shadow:none;border-radius:0;width:100%}
-.player.player.max_player{height:calc(100vh - 160px)}
+.player.player.max_player{height:calc(100vh - 220px)}
 }
 @media screen and (max-width:350px){
 .track_duration{display:none}
