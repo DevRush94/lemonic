@@ -4,7 +4,6 @@
   </div>
 
   <div :class="['player', getPlayerViewClass()]" v-if="FullPlaylist.length" :style="{ '--bg-image': 'url(' + currentTrack.cover + ')' }">
-    <div v-if="loading" class="track_loader">Loading Selected Song, Please wait...</div>
 
     <div class="track_info_box" v-if="currentTrack">
       <div class="just_wrapper">
@@ -46,7 +45,7 @@
                 :max="1"
                 step="0.01"
                 @input="changeVolume" />
-              <button class="track_download" @click="toggleDownload">
+              <button v-if="!loading" class="track_download" @click="toggleDownload">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M10.96 5.933c2.4.207 3.38 1.44 3.38 4.14v.087c0 2.98-1.193 4.173-4.173 4.173h-4.34c-2.98 0-4.173-1.193-4.173-4.173v-.087c0-2.68.967-3.913 3.327-4.133M8 1.333V9.92" />
                   <path d="M10.233 8.433L8 10.667 5.767 8.433" />
@@ -140,11 +139,12 @@ export default {
     };
 
     const toggleDownload = () => {
-      if (currentTrack && currentTrack.value) {
+      const nowPlayingTrack = FullPlaylist.value.find(track => track.isNowPlaying);
+      if (nowPlayingTrack) {
         const link = document.createElement('a');
-        link.href = currentTrack.value.objectURL;
-        link.download = `${currentTrack.value.name} - ${currentTrack.value.artists} [320kbps][Lemonic].mp3`;
-        link.click(); setTimeout(() => { link.remove(); });
+        link.href = nowPlayingTrack.objectURL;
+        link.download = `${nowPlayingTrack.name} - ${nowPlayingTrack.artists} [320kbps][Lemonic].mp3`;
+        link.click(); link.remove();
       }
     };
 
@@ -197,7 +197,6 @@ export default {
           const existingSong = FullPlaylist.value.findIndex(track => track.id === newTrack.id);
           if (existingSong !== -1) {
             setNowPlaying(existingSong);
-            loading.value = false;
             return;
           }
           try {
@@ -236,7 +235,6 @@ export default {
 
               setNowPlaying(FullPlaylist.value.length - 1);
               setTimeout(() => changeVolume());
-              loading.value = false;
               // Background fetch without waiting
               BgFetch(data, newTrack);
             }
@@ -260,6 +258,7 @@ export default {
           ...FullPlaylist.value[songIDFetched],
           objectURL: objectURL,
         };
+        loading.value = false
         //To Fix setting the same time
         setTimeout(() => { audioElement.value.currentTime = tempTime })
       });
