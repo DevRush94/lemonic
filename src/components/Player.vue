@@ -73,7 +73,7 @@
 
     <div class="playlist_box" v-if="getPlayerViewClass() === 'max_player'">
       <div class="playlist_list" v-for="track in FullPlaylist" :key="track.id" style="font-size: 10px;">
-        <div v-bind:class="{ current: track.isNowPlaying }" class="playlist_flex" style="display: flex; gap: 10px; border-top: 1px solid #eee; padding: 10px;">
+        <div v-bind:class="{ current: track.isNowPlaying }" class="playlist_flex" style="display: flex; gap: 10px;padding: 10px;">
           <img class="playlist_img" :src="track.cover" :alt="track.name" style="width: 40px;">
           <div>
             <div class="playlist_title">{{ track.name }}</div>

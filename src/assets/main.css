@@ -92,7 +92,7 @@ audio{visibility:hidden;width:0;height:0;opacity:0}
 .track_info_box .track_sub_info .volume_slider::-moz-range-track{height:12px;background:#ddd;border-radius:2px;outline:0}
 .track_loader{position:absolute;left:0;right:0;top:0;bottom:0;background-color:rgba(0,0,0,.5);color:#fff;font-size:10px;line-height:130px;text-align:center;z-index:1}
 .track_duration{font-size:11px;vertical-align:middle;display:inline-block;width:25px;white-space:nowrap}
-.error-pop{position:fixed;top:10px;right:0;padding:12px;background:#000;color:#fff;font-size:14px;left:0;width:calc(10vw + 300px);margin:auto;text-align:center}
+.error-pop{position:fixed;top:110px;right:0;padding:12px;background:#000;color:#fff;font-size:14px;left:0;width:calc(10vw + 300px);margin:auto;text-align:center;z-index:1000;border:1px solid #fafa33}
 .expand_icon{position:absolute;right:0;bottom:0}
 .current.playlist_flex{background:rgba(250,248,80,.15)}
 .seekbar_box{display:flex;align-items:center;justify-content:space-between;padding-right:35px;padding-top:7px;padding-bottom:3px}
@@ -103,6 +103,7 @@ audio{visibility:hidden;width:0;height:0;opacity:0}
 .track_info_box .track_sub_info .track_title{font-size:14px}
 .player{bottom:0;right:0;box-shadow:none;border-radius:0;width:100%}
 .player.player.max_player{height:calc(100vh - 220px)}
+.error-pop{top:170px}
 }
 @media screen and (max-width:350px){
 .track_duration{display:none}
