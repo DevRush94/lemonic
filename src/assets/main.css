@@ -57,11 +57,17 @@ input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focu
 .box{gap:15px}
 }
 /*! Player  */
-.player{position:fixed;bottom:15px;right:15px;background:#171717;color:#fff;z-index:10;padding:10px;font-size:0;width:calc(100% - 30px);max-width:450px;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,.2)}
+.player{position:fixed;bottom:15px;right:15px;background:#171717;color:#fff;z-index:10;font-size:0;width:calc(100% - 30px);max-width:450px;overflow:hidden;border-radius:10px;border:1px solid rgba(255,255,255,.2)}
+.player:after{background-image:var(--bg-image);left:0;right:0;top:0;bottom:0;content:'';display:block;position:absolute;z-index:-7;background-repeat:no-repeat;background-size:100% 100%;filter:blur(20px)}
+.player .track_info_box{background:rgb(0,0,0 ,.3);backdrop-filter:blur( 15px );-webkit-backdrop-filter:blur( 10px );border-radius:10px}
+.player .playlist_box{background:rgb(0,0,0 ,.3);backdrop-filter:blur( 20px );-webkit-backdrop-filter:blur( 10px );border-radius:10px}
 .player,.player *{transition:.3s all ease-in-out}
 .player.mini_player{height:130px}
-.player.mid_player{height:425px;max-width:275px;padding:16px}
+.player.max_player .track_info_box,.player.mini_player .track_info_box{padding:10px}
+.player.max_player .track_info_box{padding-bottom:0}
+.player.mid_player{height:425px;max-width:275px}
 .player.mid_player .track_info_box .track_cover{width:240px;left:16px;top:16px;border-radius:10px}
+.player.mid_player .track_info_box{padding:16px}
 .player.mid_player .track_info_box .track_sub_info{padding-top:256px;padding-left:0}
 .player.mid_player .track_info_box .track_sub_info .track_title{font-size:15px;font-weight:500;padding-bottom:3px}
 .player.mid_player .track_info_box .track_sub_info .track_artist{font-size:12px;padding-bottom:20px}
@@ -70,7 +76,7 @@ input:-webkit-autofill,input:-webkit-autofill:active,input:-webkit-autofill:focu
 .player.max_player .just_wrapper{height:130px}
 audio{visibility:hidden;width:0;height:0;opacity:0}
 .track_info_box .track_cover{width:130px;left:0;top:0;bottom:0;position:absolute;aspect-ratio:1;border-radius:0}
-.track_info_box .track_sub_info{padding-left:130px}
+.track_info_box .track_sub_info{padding-left:130px;padding-top:0}
 .track_info_box .track_sub_info .controls{display:flex;align-items:center;justify-content:space-between}
 .track_info_box .track_sub_info .controls .inner_control{display:flex;align-items:center;justify-content:space-between;gap:15px}
 .track_info_box .track_sub_info .controls button{font-size:0}
@@ -89,8 +95,8 @@ audio{visibility:hidden;width:0;height:0;opacity:0}
 .error-pop{position:fixed;top:10px;right:0;padding:12px;background:#000;color:#fff;font-size:14px;left:0;width:calc(10vw + 300px);margin:auto;text-align:center}
 .expand_icon{position:absolute;right:0;bottom:0}
 .current.playlist_flex{background:rgba(250,248,80,.15)}
-.seekbar_box{display:flex;align-items:center;justify-content:space-between;padding-right:35px;padding-top:7px}
-.playlist_box{height:calc(100vh - 280px);overflow-y:scroll}
+.seekbar_box{display:flex;align-items:center;justify-content:space-between;padding-right:35px;padding-top:7px;padding-bottom:3px}
+.playlist_box{height:calc(100vh - 265px);overflow-y:scroll}
 .playlist_box::-webkit-scrollbar{display:none}
 @media screen and (max-width:767px){
 .artifical-pad{padding-bottom:145px}
