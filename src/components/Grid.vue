@@ -5,18 +5,24 @@
       <div class="dragger">
 
         <ul class="box" v-bind:id="playlist.id">
-          <li
-            class="grid"
-            v-for="(track, trackIndex) in playlist.tracks.items"
-            :key="track.track.id">
-            <div class="song_box" @click="selectTrack(track.track)">
-              <img :src="getAlbumCover(track)" alt="Album cover">
-              <div class="song_info">
-                <div class="title__name">{{ track.track.name }}</div>
-                <div class="artist__name">{{ track.track.artists[0].name }}</div>
+          <swiper
+            :slides-per-view="3"
+            :space-between="50"
+            @swiper="onSwiper"
+            @slideChange="onSlideChange">
+            <swiper-slide
+              class="grid"
+              v-for="(track, trackIndex) in playlist.tracks.items"
+              :key="track.track.id">
+              <div class="song_box" @click="selectTrack(track.track)">
+                <img :src="getAlbumCover(track)" alt="Album cover">
+                <div class="song_info">
+                  <div class="title__name">{{ track.track.name }}</div>
+                  <div class="artist__name">{{ track.track.artists[0].name }}</div>
+                </div>
               </div>
-            </div>
-          </li>
+            </swiper-slide>
+          </swiper>
         </ul>
 
       </div>
@@ -27,7 +33,10 @@
 
 <script>
 import { inject, ref, watch } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
 
+// Import Swiper styles
+import 'swiper/css';
 const clientId = '4875732b46fe4b2b8671c683ea012688';
 const clientSecret = 'f4490eb08e334cba9e0a02a472a59f1a';
 const basicAuth = btoa(clientId + ':' + clientSecret);
@@ -58,6 +67,10 @@ export default {
       loadTimes: {},
     };
   },
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
   setup() {
     const store = inject('store');
     const currentPlaylist = ref([]);
@@ -82,11 +95,19 @@ export default {
       };
       store.setTrack(selectedTrackObject);
     };
+    const onSwiper = (swiper) => {
+      console.log(swiper);
+    };
+    const onSlideChange = () => {
+      console.log('slide change');
+    };
 
     return {
       selectTrack,
       currentPlaylist, // expose currentPlaylist to the template
       AlsoToSidebar,
+      onSwiper,
+      onSlideChange,
     };
   },
   async mounted() {
