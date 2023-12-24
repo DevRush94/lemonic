@@ -6,12 +6,12 @@
 
         <ul class="box" v-bind:id="playlist.id">
           <swiper
-            :slides-per-view="3"
-            :space-between="50"
+            :slides-per-view="6"
+            :space-between="25"
             @swiper="onSwiper"
             @slideChange="onSlideChange">
             <swiper-slide
-              class="grid"
+              class="grid_"
               v-for="(track, trackIndex) in playlist.tracks.items"
               :key="track.track.id">
               <div class="song_box" @click="selectTrack(track.track)">
