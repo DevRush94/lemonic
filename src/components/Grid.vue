@@ -8,7 +8,10 @@
           <swiper
             :slides-per-view="6"
             :space-between="25"
-            @swiper="onSwiper"
+            :navigation="true"
+            :freeMode="true"
+            :modules="modules"
+            @swiper="onSwiper(playlist.id)"
             @slideChange="onSlideChange">
             <swiper-slide
               class="grid_"
@@ -34,7 +37,9 @@
 <script>
 import { inject, ref, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
+import { Navigation, FreeMode } from 'swiper/modules';
+import 'swiper/css/navigation';
+import 'swiper/css/free-mode';
 // Import Swiper styles
 import 'swiper/css';
 const clientId = '4875732b46fe4b2b8671c683ea012688';
@@ -69,7 +74,7 @@ export default {
   },
   components: {
     Swiper,
-    SwiperSlide,
+    SwiperSlide
   },
   setup() {
     const store = inject('store');
@@ -108,6 +113,7 @@ export default {
       AlsoToSidebar,
       onSwiper,
       onSlideChange,
+      modules: [Navigation, FreeMode],
     };
   },
   async mounted() {
