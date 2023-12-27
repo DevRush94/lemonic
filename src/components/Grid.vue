@@ -14,11 +14,12 @@
             @swiper="onSwiper(playlist.id)"
             @slideChange="onSlideChange">
             <swiper-slide
-              class="grid_"
               v-for="(track, trackIndex) in playlist.tracks.items"
               :key="track.track.id">
-              <div class="song_box" @click="selectTrack(track.track)">
-                <img :src="getAlbumCover(track)" alt="Album cover">
+              <div @click="selectTrack(track.track)" class="grid">
+                <span class="song_box">
+                  <img :src="getAlbumCover(track)" alt="Album cover">
+                </span>
                 <div class="song_info">
                   <div class="title__name">{{ track.track.name }}</div>
                   <div class="artist__name">{{ track.track.artists[0].name }}</div>
@@ -187,7 +188,7 @@ export default {
       localStorage.setItem("mainPlaylist", JSON.stringify(this.mainData));
       localStorage.setItem('lastFetched', new Date());
       let allPlaylistsData = [];
-      for (let i = 0; i < 1; i++) {
+      for (let i = 0; i < 5; i++) {
         const playlistResponse = await fetch(data.playlists.items[i].href, {
           method: 'GET',
           headers: {
@@ -211,18 +212,7 @@ export default {
     async cacheLoad() {
       this.mainData = JSON.parse(localStorage.getItem('mainPlaylist'));
       this.subPlaylist = JSON.parse(localStorage.getItem('subPlaylist'));
-
       this.loading = false;
-
-      // Initialize loadTimes
-      for (let playlistIndex = 0; playlistIndex < this.subPlaylist.length; playlistIndex++) {
-        for (let trackIndex = 0; trackIndex < 30 && trackIndex < this.subPlaylist[playlistIndex].tracks.items.length; trackIndex++) {
-          const key = `${playlistIndex}-${trackIndex}`;
-          this.loadTimes[key] = Date.now() + ((playlistIndex * this.subPlaylist[playlistIndex].tracks.items.length + trackIndex) * 100);
-        }
-      }
-
-
     },
 
     getAlbumCover(track) {

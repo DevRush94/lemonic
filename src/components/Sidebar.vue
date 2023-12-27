@@ -57,7 +57,7 @@ export default {
         }
       });
       const playlistData = await playlistResponse.json();
-      const updatedCurrentPlaylist = JSON.stringify([JSON.parse(localStorage.getItem('subPlaylist'))[0], { ...playlist, tracks: { ...playlistData } }]);
+      const updatedCurrentPlaylist = JSON.stringify([ ...JSON.parse(localStorage.getItem('subPlaylist')), { ...playlist, tracks: { ...playlistData } }, ]);
       localStorage.setItem('currentPlaylist', updatedCurrentPlaylist);
 
       // Use store.commit to update the state in the store
