@@ -99,6 +99,7 @@ audio{visibility:hidden;width:0;height:0;opacity:0}
 .playlist_box{height:calc(100vh - 265px);overflow-y:scroll}
 .playlist_box::-webkit-scrollbar{display:none}
 .swiper-button-next,.swiper-button-prev{color:#faf850!important}
+.swiper-button-next:after,.swiper-button-prev:after{font-size:26px!important}
 @media screen and (max-width:767px){
 .artifical-pad{padding-bottom:145px}
 .track_info_box .track_sub_info .track_title{font-size:14px}

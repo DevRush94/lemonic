@@ -6,13 +6,21 @@
 
         <ul class="box" v-bind:id="playlist.id">
           <swiper
-            :slides-per-view="6"
-            :space-between="25"
             :navigation="true"
             :freeMode="true"
             :modules="modules"
             @swiper="onSwiper(playlist.id)"
-            @slideChange="onSlideChange">
+            @slideChange="onSlideChange"
+            :breakpoints="{
+              1024: {
+                slidesPerView: 6.5,
+                spaceBetween: 26,
+              },
+              320: {
+                slidesPerView: 2.5,
+                spaceBetween: 12,
+              },
+            }">
             <swiper-slide
               v-for="(track, trackIndex) in playlist.tracks.items"
               :key="track.track.id">
